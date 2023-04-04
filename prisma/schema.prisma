@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  email     String   @unique
+  firstName String?
+  lastName  String?
+  password  String
+  posts     Post[]
+}
+
+model PostCategory {
+  id String @id @default(uuid())
+
+  postId String
+  post   Post   @relation(fields: [postId], references: [id])
+
+  name String
+
+  @@unique([postId, name])
+}
+
+model Post {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  description String?
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  name         String
+  PostCategory PostCategory[]
+
+  status POST_STATUS @default(DRAFT)
+
+  @@unique([authorId, name])
+  @@index([authorId, id])
+}
+
+enum POST_STATUS {
+  DRAFT
+  PUBLISHED
+}
