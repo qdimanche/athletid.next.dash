@@ -1,9 +1,9 @@
 import {getUserFromCookie} from "@/lib/auth";
 import {db} from "@/lib/db";
 import {cookies} from "next/headers";
-import Button from "./UI/Button";
 import Card from "./UI/Card";
-import {PostCardProps} from "@/types/PostCardProps";
+import {FC} from "react";
+import {Post} from ".prisma/client";
 
 const getData = async () => {
     const user = await getUserFromCookie(cookies());
@@ -16,18 +16,13 @@ const getData = async () => {
 
     return posts;
 };
-const PostCard = async ({title}: PostCardProps) => {
+const PostCard : FC<{post: Post}> = ({post}) => {
 
     return (
         <Card>
             <div className="flex justify-between items-center">
                 <div>
-                    <span className="text-3xl text-gray-600">{title}</span>
-                </div>
-                <div>
-                    <Button intent="text" className="text-violet-600">
-                        + Create New
-                    </Button>
+                    <span className="text-3xl text-gray-600">{post.name}</span>
                 </div>
             </div>
         </Card>
