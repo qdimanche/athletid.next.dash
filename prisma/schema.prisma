@@ -20,29 +20,18 @@ model User {
   posts     Post[]
 }
 
-model PostCategory {
-  id String @id @default(uuid())
-
-  postId String
-  post   Post   @relation(fields: [postId], references: [id])
-
-  name String
-
-  @@unique([postId, name])
-}
-
 model Post {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   description String?
+  category    String
 
   authorId String
   author   User   @relation(fields: [authorId], references: [id])
 
-  name         String
-  PostCategory PostCategory[]
+  name String
 
   status POST_STATUS @default(DRAFT)
 

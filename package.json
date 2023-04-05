@@ -14,6 +14,7 @@
     "@types/node": "18.15.11",
     "@types/react": "18.0.33",
     "@types/react-dom": "18.0.11",
+    "@types/react-modal": "^3.13.1",
     "bcrypt": "^5.1.0",
     "class-variance-authority": "^0.5.1",
     "clsx": "^1.2.1",
@@ -22,10 +23,12 @@
     "eslint-config-next": "13.2.4",
     "jose": "^4.13.1",
     "next": "13.2.4",
+    "nookies": "^2.5.2",
     "prisma": "^4.12.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-feather": "^2.0.10",
+    "react-modal": "^3.16.1",
     "typescript": "5.0.3"
   },
   "prisma": {

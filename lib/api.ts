@@ -37,3 +37,21 @@ export const signin = (user: Object) => {
         body: JSON.parse(JSON.stringify(user)),
     })
 }
+
+
+
+
+export const createNewPost = (name:String, category:String, description:String) => {
+
+    const requestBody: object = {
+        name: name,
+        category: category,
+        description: description,
+    };
+
+    return fetcher({
+        url: "/api/post",
+        method: "POST",
+        body: JSON.parse(JSON.stringify(requestBody)),
+    });
+};

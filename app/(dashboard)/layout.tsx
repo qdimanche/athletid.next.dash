@@ -1,5 +1,5 @@
 import React from "react";
-import GlassPane from "@/components/GlassPane";
+import GlassPane from "@/components/UI/GlassPane";
 import '@/styles/global.css';
 import {Props} from "@/types/Props";
 
@@ -13,6 +13,7 @@ function DashboardRootLayout({children}: Props) {
             className={"w-full h-full flex items-center justify-center"}>
             {children}
         </GlassPane>
+        <div id={"modal"}></div>
         </body>
         </html>
     );

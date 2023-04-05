@@ -2,9 +2,9 @@
 import React, {useCallback, useState} from 'react';
 import {useRouter} from "next/navigation";
 import {register, signin} from "@/lib/api";
-import Card from "@/components/Card"
-import Input from "@/components/Input"
-import Button from "@/components/Button"
+import Card from "@/components/UI/Card"
+import Input from "@/components/UI/Input"
+import Button from "@/components/UI/Button"
 import Link from "next/link"
 
 const registerContent = {
