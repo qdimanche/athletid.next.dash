@@ -1,46 +1,41 @@
 import {cva, VariantProps} from "class-variance-authority";
+import Link from "next/link";
 import {FC} from "react";
 
 const buttonClasses = cva(
     [
-        "rounded-3xl",
-        "font-bold",
-        "hover:scale-110",
-        "active:scale-100",
+        "duration-300",
+        "px-6",
+        "py-3",
+        "md:px-8",
         "transition",
-        "duration-200",
-        "ease-in-out",
+        "md:py-4",
+        "!rounded-full",
+        "border",
+        "w-fit",
+        "!text-base",
     ],
     {
         variants: {
             intent: {
                 primary: [
-                    "bg-violet-500",
-                    "text-white",
-                    "border-transparent",
-                    "hover:bg-violet-600",
+                    "bg-timeRed",
+                    "hover:bg-timeRedHover",
+                    "circle-boxShadow z-[900]",
+                    "!border-0",
+                    "!text-white",
                 ],
 
                 secondary: [
-                    "bg-white",
-                    "text-black",
-                    "border-gray-400",
-                    "hover:bg-gray-100",
-                    "border-solid",
-                    "border-2",
-                    "border-gray-800",
+                    "border",
+                    "border-timeRed",
+                    "z-[900]",
+                    "!text-black",
                 ],
-                text: ["bg-transparent", "text-black", "hover:bg-gray-100"],
-            },
-            size: {
-                small: ["text-md", "py-1", "px-2"],
-                medium: ["text-lg", "px-6", "py-2"],
-                large: ["text-xlg", "px-8", "py-4"],
             },
         },
         defaultVariants: {
             intent: "primary",
-            size: "medium",
         },
     }
 );
@@ -48,21 +43,30 @@ const buttonClasses = cva(
 export interface ButtonProps
     extends React.HTMLAttributes<HTMLButtonElement>,
         VariantProps<typeof buttonClasses> {
-    type?: "button" | "submit" | "reset" | undefined
+    type?: "button" | "submit" | "reset" | undefined;
+    link?: string; // Le lien est maintenant optionnel
 }
 
 const Button: FC<ButtonProps> = ({
                                      children,
                                      className,
                                      intent,
-                                     size,
+                                     link,
                                      ...props
                                  }) => {
-    return (
-        <button className={buttonClasses({intent, size, className})} {...props}>
-            {children}
-        </button>
-    );
+    if (!link) {
+        return (
+            <button className={buttonClasses({intent, className})} {...props}>
+                {children}
+            </button>
+        );
+    } else {
+        return (
+            <Link href={link} className={buttonClasses({intent, className})}>
+                {children}
+            </Link>
+        );
+    }
 };
 
 export default Button;

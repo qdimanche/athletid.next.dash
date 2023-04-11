@@ -86,7 +86,7 @@ const EditPostForm: FC<{ post: Post }> = ({post}) => {
                         <div>
                         </div>
                         <div>
-                            <Button type="submit" intent="secondary">
+                            <Button type="submit" intent="primary">
                                 Edit
                             </Button>
                         </div>

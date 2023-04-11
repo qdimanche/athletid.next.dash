@@ -5,7 +5,6 @@ import {register, signin} from "@/lib/api";
 import Card from "@/components/UI/Card"
 import Input from "@/components/UI/Input"
 import Button from "@/components/UI/Button"
-import Link from "next/link"
 
 const registerContent = {
     linkUrl: "/signin",
@@ -33,22 +32,22 @@ const AuthForm = ({mode}: { mode: "register" | "signin" }) => {
 
     const router = useRouter();
 
-    const handleSubmit = useCallback(async(e:any) => {
+    const handleSubmit = useCallback(async (e: any) => {
         e.preventDefault()
 
-        try{
+        try {
             if (mode === "register") {
                 await register(formState)
-            } else if (mode === "signin"){
+            } else if (mode === "signin") {
                 await signin(formState)
             }
             router.replace("/home")
-        }catch (e) {
+        } catch (e) {
             setError(`Could not ${mode}`)
-        }finally {
+        } finally {
             setFormState({...initial})
         }
-    },[
+    }, [
         formState.email,
         formState.password,
         formState.firstName,
@@ -77,7 +76,7 @@ const AuthForm = ({mode}: { mode: "register" | "signin" }) => {
                                     value={formState.firstName}
                                     className="border-solid border-gray border-2 px-6 py-2 text-lg rounded-3xl w-full"
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                        setFormState((s) => ({ ...s, firstName: e.target.value }))
+                                        setFormState((s) => ({...s, firstName: e.target.value}))
                                     }
                                 />
                             </div>
@@ -89,7 +88,7 @@ const AuthForm = ({mode}: { mode: "register" | "signin" }) => {
                                     value={formState.lastName}
                                     className="border-solid border-gray border-2 px-6 py-2 text-lg rounded-3xl w-full"
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                        setFormState((s) => ({ ...s, lastName: e.target.value }))
+                                        setFormState((s) => ({...s, lastName: e.target.value}))
                                     }
                                 />
                             </div>
@@ -104,7 +103,7 @@ const AuthForm = ({mode}: { mode: "register" | "signin" }) => {
                             value={formState.email}
                             className="border-solid border-gray border-2 px-6 py-2 text-lg rounded-3xl w-full"
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                setFormState((s) => ({ ...s, email: e.target.value }))
+                                setFormState((s) => ({...s, email: e.target.value}))
                             }
                         />
                     </div>
@@ -117,27 +116,16 @@ const AuthForm = ({mode}: { mode: "register" | "signin" }) => {
                             placeholder="Password"
                             className="border-solid border-gray border-2 px-6 py-2 text-lg rounded-3xl w-full"
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                setFormState((s) => ({ ...s, password: e.target.value }))
+                                setFormState((s) => ({...s, password: e.target.value}))
                             }
                         />
                     </div>
-                    <div className="flex items-center justify-between">
-                        <div>
-              <span>
-                <Link
-                    href={content.linkUrl}
-                    className="text-blue-600 font-bold"
-                >
-                  {content.linkText}
-                </Link>
-              </span>
-                        </div>
-                        <div>
-                            <Button type="submit" intent="secondary">
-                                {content.buttonText}
-                            </Button>
-                        </div>
+                    <div className={'flex justify-center'}>
+                        <Button type="submit" intent="secondary">
+                            {content.buttonText}
+                        </Button>
                     </div>
+
                 </form>
             </div>
         </Card>

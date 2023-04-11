@@ -1,19 +1,19 @@
 import React from "react";
-import GlassPane from "@/components/UI/GlassPane";
 import '@/styles/global.css';
 import {Props} from "@/types/Props";
+import Navbar from "@/components/Navbar/Navbar";
 
 function DashboardRootLayout({children}: Props) {
 
     return (
         <html lang={"en"}>
         <head/>
-        <body className={"h-screen w-screen rainbow-mesh p-6"}>
-        <GlassPane
-            className={"w-full h-full flex items-center justify-center"}>
+        <body>
+        <div className={"relative max-w-[350px] md:max-w-[1170px] mx-auto px-4 pt-xl md:pt-2xl h-full"}>
+            <Navbar/>
             {children}
-        </GlassPane>
-        <div id={"modal"}></div>
+        </div>
+        <div id={'modal'} className={'fixed left-0 !max-w-screen'}></div>
         </body>
         </html>
     );

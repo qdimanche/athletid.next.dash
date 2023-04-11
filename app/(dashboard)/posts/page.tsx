@@ -2,6 +2,7 @@ import React from 'react';
 import {delay} from "@/lib/async";
 import {db} from "@/lib/db";
 import PostCard from "@/components/PostCard";
+import {NewPost} from "@/components/NewPost";
 
 const getData = async () => {
     await delay(2000)
@@ -17,18 +18,22 @@ async function Page() {
 
     return (
         <div>
-            {posts.map(post => {
+            <div className={'flex flex-col md:flex-row justify-between md:items-center mb-medium md:mb-mediumXl space-y-4 md:space-y-0'}>
+                <h1 className={''}>All posts</h1>
+                <NewPost/>
+            </div>
+            <div className={'space-y-4'}>
+                {posts.map(post => {
 
-                const { createdAt: createdDate, updatedAt: updatedDate, ...rest } = post;
-                const createdAt = createdDate.toISOString();
-                const updatedAt = updatedDate.toISOString();
+                    const { createdAt: createdDate, updatedAt: updatedDate, ...rest } = post;
+                    const createdAt = createdDate.toISOString();
+                    const updatedAt = updatedDate.toISOString();
 
-                return (
-                    <>
-                        <PostCard key={post.id} post={{...rest, createdAt, updatedAt}}/>
-                    </>
-                )
-            })}
+                    return (
+                            <PostCard key={post.id} post={{...rest, createdAt, updatedAt}}/>
+                    )
+                })}
+            </div>
         </div>
     );
 };

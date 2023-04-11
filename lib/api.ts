@@ -38,6 +38,15 @@ export const signin = (user: Object) => {
     })
 }
 
+export const logout = () => {
+
+    return fetcher({
+        url: "/api/logout",
+        method: "POST",
+        body: JSON.parse(JSON.stringify('user')),
+    });
+};
+
 
 
 
@@ -64,11 +73,11 @@ export const editPost = (post: Object) => {
         body: JSON.parse(JSON.stringify(post)),
     });
 };
-export const deletePost = (id: string) => {
+export const deletePost = (post: Object) => {
 
     return fetcher({
         url: "/api/deletePost",
         method: "POST",
-        body: JSON.parse(id),
+        body: JSON.parse(JSON.stringify(post)),
     });
 };
