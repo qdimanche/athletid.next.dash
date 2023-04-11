@@ -29,8 +29,8 @@ export default async function signin(
                 serialize(process.env.JWT_COOKIE ?? 'jwt_cookie_id', jwt, {
                     httpOnly: true,
                     path: "/",
-                    secure: true,
                     maxAge: 60 * 60 * 24 * 7,
+                    secure: true
                 })
             );
             res.status(201);

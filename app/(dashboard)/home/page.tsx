@@ -2,11 +2,13 @@ import React, {Suspense} from 'react';
 import Greetings from "@/components/Greetings";
 import GreetingsSkeleton from "@/components/GreetingsSkeleton";
 import {NewPost} from "@/components/NewPost";
-import PostCard from "@/components/PostCard";
 import {delay} from "@/lib/async";
 import {getUserFromCookie} from "@/lib/auth";
 import {cookies} from "next/headers";
 import {db} from "@/lib/db";
+import Link from "next/link";
+import {NextRequest, NextResponse} from "next/server";
+
 
 const getData = async () => {
     await delay(2000)
@@ -19,6 +21,11 @@ const getData = async () => {
     })
 
     return {posts}
+}
+
+async function disconnectHandler (req: any, res : any){
+    res.clearCookie(process.env.JWT_COOKIE);
+    return NextResponse.redirect("/signin");
 }
 
 async function Page() {
@@ -39,15 +46,8 @@ async function Page() {
                         <NewPost/>
                     </div>
                 </div>
-                <div className="mt-6 flex flex-col space-y-6">
-                    {posts.map(post => {
-                        return (
-                            <div key={post.id}>
-                                <PostCard post={post}/>
-                            </div>
-                        )
-                    })}
-                </div>
+                <Link href={"/posts"}>All posts</Link>
+                <Link href={"/logout"}>Disconnect</Link>
             </div>
         </div>
     );

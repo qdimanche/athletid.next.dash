@@ -1,29 +1,43 @@
-import {getUserFromCookie} from "@/lib/auth";
-import {db} from "@/lib/db";
-import {cookies} from "next/headers";
+'use client'
 import Card from "./UI/Card";
 import {FC} from "react";
 import {Post} from ".prisma/client";
+import Button from "@/components/UI/Button";
+import {useRouter} from "next/navigation";
+import {deletePost} from "@/lib/api";
 
-const getData = async () => {
-    const user = await getUserFromCookie(cookies());
-    const posts = await db.post.findMany({
-        where: {
-            authorId: user?.id,
-        },
-        take: 5,
-    });
+interface PostCardProps {
+    post: Omit<Post, "createdAt" | "updatedAt"> & {
+        createdAt: string;
+        updatedAt: string;
+    };
+}
 
-    return posts;
-};
-const PostCard : FC<{post: Post}> = ({post}) => {
+
+const PostCard: FC<PostCardProps> = ({post}) => {
+
+    const router = useRouter()
+
+    async function deleteHandleSubmit() {
+
+        try {
+            await deletePost(post.id)
+            router.refresh()
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     return (
         <Card>
-            <div className="flex justify-between items-center">
-                <div>
-                    <span className="text-3xl text-gray-600">{post.name}</span>
-                </div>
+            <div className="flex space-x-4 justify-between items-center">
+                <span className="text-3xl text-gray-600">{post.name}</span>
+                <Button intent={"primary"} onClick={() => {
+                    router.replace(`/edit/post/${post.id}`)
+                }}>Edit</Button>
+                <Button intent={"secondary"} onClick={async (): Promise<void> => {
+                    await deleteHandleSubmit()
+                }}>Delete</Button>
             </div>
         </Card>
     );

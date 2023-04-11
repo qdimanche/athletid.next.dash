@@ -55,3 +55,20 @@ export const createNewPost = (name:String, category:String, description:String) 
         body: JSON.parse(JSON.stringify(requestBody)),
     });
 };
+
+export const editPost = (post: Object) => {
+
+    return fetcher({
+        url: "/api/editPost",
+        method: "POST",
+        body: JSON.parse(JSON.stringify(post)),
+    });
+};
+export const deletePost = (id: string) => {
+
+    return fetcher({
+        url: "/api/deletePost",
+        method: "POST",
+        body: JSON.parse(id),
+    });
+};

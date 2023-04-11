@@ -35,7 +35,6 @@ model Post {
 
   status POST_STATUS @default(DRAFT)
 
-  @@unique([authorId, name])
   @@index([authorId, id])
 }
 

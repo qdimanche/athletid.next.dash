@@ -24,7 +24,6 @@ CREATE TABLE `Post` (
     `status` ENUM('DRAFT', 'PUBLISHED') NOT NULL DEFAULT 'DRAFT',
 
     INDEX `Post_authorId_id_idx`(`authorId`, `id`),
-    UNIQUE INDEX `Post_authorId_name_key`(`authorId`, `name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
