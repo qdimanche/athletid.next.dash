@@ -6,7 +6,7 @@ import Button from "@/components/UI/Button";
 import {useRouter} from "next/navigation";
 import {deletePost} from "@/lib/api";
 import {FiEdit2} from "react-icons/fi";
-import {AiOutlineDelete} from "react-icons/all";
+import {AiOutlineDelete} from "react-icons/ai";
 
 interface PostCardProps {
     post: Omit<Post, "createdAt" | "updatedAt"> & {

@@ -69,18 +69,6 @@ const EditPostForm: FC<{ post: Post }> = ({post}) => {
                                 }
                             />
                         </div>
-                        <div className="pl-2">
-                            <div className="text-lg mb-4 ml-2 text-black/50">Description</div>
-                            <Input
-                                required
-                                placeholder="Last Name"
-                                value={formState.description || undefined}
-                                className="border-solid border-gray border-2 px-6 py-2 text-lg rounded-3xl w-full"
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setFormState((s) => ({ ...s, description: e.target.value }))
-                                }
-                            />
-                        </div>
                     </div>
                     <div className="flex items-center justify-between">
                         <div>

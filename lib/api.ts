@@ -1,4 +1,7 @@
 import {FetcherProps} from "@/types/FetcherProps";
+import slugify from "slugify";
+import axios from "axios";
+import {Section} from ".prisma/client";
 
 
 const fetcher = async ({url, method, body, json = true}: FetcherProps) => {
@@ -50,19 +53,52 @@ export const logout = () => {
 
 
 
-export const createNewPost = (name:String, category:String, description:String) => {
 
-    const requestBody: object = {
-        name: name,
-        category: category,
-        description: description,
+
+export const createNewPost = async (name:string, category:string, img:File, sections: Section[]) => {
+
+    // Upload the image to Cloudinary and get the URL
+    const formData = new FormData();
+    formData.append("file", img);
+    formData.append("upload_preset", "ml_default");
+
+    const config = {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
     };
 
-    return fetcher({
+    const res = await axios.post("https://api.cloudinary.com/v1_1/dxplbf0t0/image/upload", formData, config);
+    const imageUrl = res.data.secure_url;
+
+    const newPost = await fetcher({
         url: "/api/post",
         method: "POST",
-        body: JSON.parse(JSON.stringify(requestBody)),
+        body: {
+            name: name,
+            category: category,
+            img: imageUrl,
+            slug: slugify(name),
+        },
     });
+
+    const postId = newPost?.id; // Récupérez l'ID du nouveau post créé
+
+    await Promise.all(
+        sections.map(async (section: Section) => {
+
+            await fetcher({
+                url: "/api/section",
+                method: "POST",
+                body: {
+                    postId: postId,
+                    subTitle: section.subTitle,
+                    paragraph : section.paragraph
+                },
+            });
+        })
+    );
+
+    return newPost
+
 };
 
 export const editPost = (post: Object) => {

@@ -10,17 +10,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const user = await validateJWT(jwt);
 
         await db.post.create({
+
             data: {
-                name: req.body.name,
-                category: req.body.category,
-                img: req.body.img,
-                slug: req.body.slug,
-                authorId: user.id,
-                sections: {
-                    createMany: {
-                        data: req.body.sections ? req.body.sections : [{subTitle: '', paragraph: ''}]
-                    }
-                }
+                subTitle: req.body.subTitle,
+                paragraph: req.body.paragraph,
+                postId: req.body.postId
             },
         });
 

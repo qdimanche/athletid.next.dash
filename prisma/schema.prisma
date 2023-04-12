@@ -25,17 +25,31 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  description String?
-  category    String
+  category String
+
+  img String?
 
   authorId String
   author   User   @relation(fields: [authorId], references: [id])
 
-  name String
-
+  name   String
+  slug   String      @default("undefined")
   status POST_STATUS @default(DRAFT)
 
+  sections Section[]
+
   @@index([authorId, id])
+}
+
+model Section {
+  id        String @id @default(uuid())
+  subTitle  String
+  paragraph String
+
+  postId String
+  post   Post   @relation(fields: [postId], references: [id])
+
+  @@index([postId, id])
 }
 
 enum POST_STATUS {

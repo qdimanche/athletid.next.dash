@@ -1,6 +1,6 @@
 export interface FetcherProps {
     url : string,
     method : string,
-    body:  JSON,
+    body:  object,
     json? : boolean
 }

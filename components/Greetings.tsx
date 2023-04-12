@@ -20,7 +20,7 @@ const Greeting = async () => {
                     Hello, {user?.firstName}!
                 </h1>
                 <h4 className="text-xl text-gray-400">
-                    Check your daily tasks and schedule
+                    Check your posts
                 </h4>
             </div>
         </Card>

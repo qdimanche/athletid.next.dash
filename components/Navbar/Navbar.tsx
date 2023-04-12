@@ -2,17 +2,14 @@
 import React, {useEffect, useState} from 'react'
 import Link from 'next/link'
 import Button from '../UI/Button'
-import {FaFacebook, FaInstagram, FaLinkedin} from 'react-icons/fa'
 import Image from 'next/image'
 import {useIsLargeScreen} from '../Hooks/useMediaQuery'
 import Div100vh from "react-div-100vh";
 import Burger from "./Burger";
 import {logout} from "@/lib/api";
-import {db} from "@/lib/db";
-import {router} from "next/client";
 import {useRouter} from "next/navigation";
 
-const Navbar = (props:any) => {
+const Navbar = (props: any) => {
     const [isScrolled, setIsScrolled] = useState(false)
 
     const [clickCounter, setIsClickCounter] = useState(0);
@@ -22,10 +19,10 @@ const Navbar = (props:any) => {
 
     const router = useRouter();
 
-    const handleDisconnect = async() => {
+    const handleDisconnect = async () => {
         try {
-                await logout()
-                router.replace("/signin")
+            await logout()
+            router.replace("/signin")
         } catch (e) {
             console.log(e)
         }
@@ -109,15 +106,19 @@ const Navbar = (props:any) => {
                                     <Link href="/posts">Posts</Link>
                                 </li>
                                 <li className={'text-[38px] opacity-60'}>
-                                    <div onClick={() => {handleDisconnect()}}>Disconnect</div>
+                                    <div onClick={() => {
+                                        handleDisconnect()
+                                    }}>Disconnect
+                                    </div>
                                 </li>
                             </ul>
                         </div>
                     </Div100vh>
                 </div>
-                <div className={'z-[900] w-[2rem] lg:hidden'} >
+                <div className={'z-[900] w-[2rem] lg:hidden'}>
                     <Burger clickCounter={clickCounter} click onClick={() => {
-                        handleClick()}}/>
+                        handleClick()
+                    }}/>
                 </div>
             </div>
         </div>
