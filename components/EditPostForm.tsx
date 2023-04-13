@@ -30,7 +30,6 @@ const EditPostForm: FC<{ post: Post }> = ({post}) => {
         }
     }, [
         formState.name,
-        formState.description,
         formState.category,
     ])
 

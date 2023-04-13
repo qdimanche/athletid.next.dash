@@ -1,5 +1,5 @@
 "use client";
-import {createNewPost} from "@/lib/api";
+import {createNewPost, createNewSections} from "@/lib/api";
 import React, {useState} from "react";
 import Modal from "react-modal";
 import Button from "./UI/Button";
@@ -11,17 +11,14 @@ Modal.setAppElement(`#modal`);
 export const NewPost = () => {
 
 
-
     const [modalIsOpen, setIsOpen] = useState(false);
     const openModal = () => setIsOpen(true);
     const closeModal = () => setIsOpen(false);
     const [name, setName] = useState("");
     const [category, setCategory] = useState("");
-    const [description, setDescription] = useState("");
     const [img, setImg] = useState<File>();
     const [imgUrl, setImgUrl] = useState<string | undefined>();
-    const [sections, setSections] = useState<Section[]>([{ id: "", postId: "", subTitle: "", paragraph: "" }]);
-
+    const [sections, setSections] = useState<Section[]>([{id: "", postId: "", subTitle: "", paragraph: ""}]);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
@@ -30,22 +27,30 @@ export const NewPost = () => {
         }
     };
 
-    console.log(sections)
-
-
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (img) {
-            await createNewPost(name, category, img, sections);
-            closeModal();
+            try {
+                const newPost = await createNewPost(name, category, img);
+                const filteredSections = sections.filter((obj) => {
+                    return obj.subTitle.trim() !== "";
+                });
+                await createNewSections(newPost.data.id, filteredSections);
+                closeModal();
+            } catch (error) {
+                console.error(error)
+            }
         }
     };
 
     const handleAddSection = () => {
-        const newSection: Section = { id: "", postId: "", subTitle: "", paragraph: "" };
-        setSections([...sections, newSection]);
+        const lastSection = sections[sections.length - 1];
+        if (!lastSection || (lastSection.subTitle.trim() !== "" && lastSection.paragraph.trim() !== "")) {
+            const newSection: Section = {id: "", postId: "", subTitle: "", paragraph: ""};
+            setSections([...sections, newSection]);
+        }
     }
 
 
@@ -76,12 +81,13 @@ export const NewPost = () => {
                     {sections.map((value, index) => {
                         return (
                             <div key={index} className={'bg-blue-600'}>
+
                                 <Input
                                     placeholder="Subtitle"
                                     value={sections[index].subTitle || ""}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                         const newSections = [...sections];
-                                        newSections[index] = {...newSections[index], subTitle: e.target.value};
+                                        newSections[index].subTitle = e.target.value;
                                         setSections(newSections);
                                     }}
                                 />
@@ -90,7 +96,7 @@ export const NewPost = () => {
                                     value={sections[index].paragraph || ""}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                         const newSections = [...sections];
-                                        newSections[index] = {...newSections[index], paragraph: e.target.value};
+                                        newSections[index].paragraph = e.target.value;
                                         setSections(newSections);
                                     }}
                                 />

@@ -39,9 +39,8 @@ const AuthForm = ({mode}: { mode: "register" | "signin" }) => {
             if (mode === "register") {
                 await register(formState)
             } else if (mode === "signin") {
-                await signin(formState)
+                await signin(formState) ;
             }
-            router.replace("/home")
         } catch (e) {
             setError(`Could not ${mode}`)
         } finally {

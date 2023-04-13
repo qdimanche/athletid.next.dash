@@ -30,9 +30,6 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
         }
     }
 
-
-
-
     if (
         pathname.startsWith("/_next") ||
         pathname.startsWith("/api") ||

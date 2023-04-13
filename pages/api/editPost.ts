@@ -8,7 +8,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             data: {
                 name: req.body.name,
                 category: req.body.category,
-                description: req.body.description,
             },
         });
 

@@ -1,22 +1,23 @@
-import {validateJWT} from "@/lib/auth";
 import {db} from "@/lib/db";
 import {NextApiRequest, NextApiResponse} from "next";
-import {parseCookies} from "nookies";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const cookies = parseCookies({req});
-        const jwt = cookies["jwt_cookie_id"];
-        const user = await validateJWT(jwt);
 
-        await db.post.create({
+        if (req.body.paragraph !== "") {
+            await db.section.create({
 
-            data: {
-                subTitle: req.body.subTitle,
-                paragraph: req.body.paragraph,
-                postId: req.body.postId
-            },
-        });
+                data: {
+                    subTitle: req.body.subTitle,
+                    paragraph: req.body.paragraph,
+                    post: {
+                        connect: {
+                            id: req.body.postId
+                        }
+                    }
+                },
+            });
+        }
 
         res.json({data: {message: "ok"}});
     } catch (error) {

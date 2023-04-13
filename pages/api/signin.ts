@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { db } from "@/lib/db";
 import { comparePasswords, createJWT } from "@/lib/auth";
 import { serialize } from "cookie";
+import {NextResponse} from "next/server";
 
 export default async function signin(
     req: NextApiRequest,
