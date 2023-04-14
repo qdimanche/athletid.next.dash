@@ -24,18 +24,9 @@ const fetcher = async ({url, method, body, json = true}: FetcherProps) => {
 
 };
 
+export const signin = async (user: Object) => {
 
-export const register = (user: Object) => {
-    return fetcher({
-        url: "/api/register",
-        method: "POST",
-        body: user,
-    })
-}
-
-export const signin = (user: Object) => {
-
-    return fetcher({
+    await fetcher({
         url: "/api/signin",
         method: "POST",
         body: user,
@@ -98,6 +89,19 @@ export const createNewSections = async (postId: string, sections: Section[]) => 
     }
 }
 
+export const listSections = (postId: string) => {
+
+    return fetcher({
+        url: "/api/listSections",
+        method: "POST",
+        body: {postId},
+    });
+};
+
+
+
+
+
 
 export const editPost = (post: Object) => {
 
@@ -106,7 +110,18 @@ export const editPost = (post: Object) => {
         method: "POST",
         body: JSON.parse(JSON.stringify(post)),
     });
+}
+
+;export const editSection = (section: Object) => {
+
+    return fetcher({
+        url: "/api/editSection",
+        method: "POST",
+        body: JSON.parse(JSON.stringify(section)),
+    });
 };
+
+
 export const deletePost = (post: Object) => {
 
     return fetcher({

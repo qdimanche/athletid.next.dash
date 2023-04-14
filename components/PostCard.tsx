@@ -7,16 +7,11 @@ import {useRouter} from "next/navigation";
 import {deletePost} from "@/lib/api";
 import {FiEdit2} from "react-icons/fi";
 import {AiOutlineDelete} from "react-icons/ai";
-
-interface PostCardProps {
-    post: Omit<Post, "createdAt" | "updatedAt"> & {
-        createdAt: string;
-        updatedAt: string;
-    };
-}
+import {PostProps} from "@/types/PostProps";
 
 
-const PostCard: FC<PostCardProps> = ({post}) => {
+
+const PostCard: FC<PostProps> = ({post}) => {
 
     const router = useRouter()
 
@@ -31,13 +26,13 @@ const PostCard: FC<PostCardProps> = ({post}) => {
 
     return (
         <Card className={'bg-white px-6'}>
-            <div className="flex space-x-4 justify-between items-center ">
+            <div className="grid grid-cols-2 md:flex space-x-4 justify-between items-center ">
                 <span className="text-gray-600 !text-lg">{post.name}</span>
                 <div className={'space-x-4'}>
-                    <Button className={'px-3 md:!px-4'} intent={"primary"} onClick={() => {
+                    <Button className={'!p-3'} intent={"primary"} onClick={() => {
                         router.replace(`/edit/post/${post.id}`)
                     }}>{<FiEdit2 size={16} color={"white"}/>}</Button>
-                    <Button className={'px-3 md:!px-4'} intent={"secondary"} onClick={async (): Promise<void> => {
+                    <Button className={'!p-3'} intent={"secondary"} onClick={async (): Promise<void> => {
                         await deleteHandleSubmit()
                     }}>{<AiOutlineDelete color={'black'} size={16}/>}</Button>
                 </div>

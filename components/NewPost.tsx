@@ -4,9 +4,12 @@ import React, {useState} from "react";
 import Modal from "react-modal";
 import Button from "./UI/Button";
 import Input from "./UI/Input";
-import {Section} from ".prisma/client";
+import {Post, Section} from ".prisma/client";
+import {BsPlus} from "react-icons/bs";
 
 Modal.setAppElement(`#modal`);
+
+
 
 export const NewPost = () => {
 
@@ -55,16 +58,16 @@ export const NewPost = () => {
 
 
     return (
-        <div className=" hover:scale-105 transition-all ease-in-out duration-200 h-full">
-            <Button onClick={() => openModal()}>+ New Post</Button>
+        <div className=" transition-all ease-in-out duration-200 h-full">
+            <Button className={'!mr-0 !mt-0'} onClick={() => openModal()}>Add +</Button>
 
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
-                overlayClassName="bg-[rgba(0,0,0,.4)] flex justify-center items-center absolute top-0 left-0 h-screen w-screen"
-                className="w-1/2 rounded-xl p-8 bg-[#F2F2F2] !z-[900]"
+                overlayClassName="bg-[rgba(0,0,0,.4)] flex justify-center items-center absolute top-0 left-0 h-full w-screen"
+                className="md:w-1/2 w-[80vw] md:max-w-[1170px] max-w-[350px] rounded-xl p-8 bg-[#F2F2F2] !z-[1]"
             >
-                <h1 className="text-3xl mb-6">New Post</h1>
+                <div className="text-4xl mb-6">New Post</div>
                 <form className="flex flex-col space-y-6" onSubmit={handleSubmit}>
                     <Input
                         placeholder="Name"
@@ -77,38 +80,14 @@ export const NewPost = () => {
                         value={category}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCategory(e.target.value)}
                     />
-                    <h2>Sections</h2>
-                    {sections.map((value, index) => {
-                        return (
-                            <div key={index} className={'bg-blue-600'}>
-
-                                <Input
-                                    placeholder="Subtitle"
-                                    value={sections[index].subTitle || ""}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                        const newSections = [...sections];
-                                        newSections[index].subTitle = e.target.value;
-                                        setSections(newSections);
-                                    }}
-                                />
-                                <Input
-                                    placeholder="Paragraph"
-                                    value={sections[index].paragraph || ""}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                        const newSections = [...sections];
-                                        newSections[index].paragraph = e.target.value;
-                                        setSections(newSections);
-                                    }}
-                                />
-                            </div>)
-                    })}
+                    <div className={'text-xl !mt-12'}>Sections</div>
 
 
-                    <Button intent={"secondary"} onClick={() => {
+                    <Button className={'!rounded-small !p-4'} intent={"secondary"} onClick={() => {
                         handleAddSection()
-                    }}/>
+                    }}>Add</Button>
 
-                    <Input type={"file"} value={imgUrl}
+                    <Input className={'!p-1'} type={"file"} value={imgUrl}
                            onChange={handleFileChange}
                     />
                     <Button type="submit">Create</Button>

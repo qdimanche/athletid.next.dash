@@ -1,19 +1,38 @@
 'use client'
-import React, {FC, useCallback, useState} from 'react';
-import {Post} from ".prisma/client";
+import React, {FC, useCallback, useEffect, useState} from 'react';
+import {Section} from ".prisma/client";
 import {useRouter} from "next/navigation";
-import {editPost} from "@/lib/api";
-import * as console from "console";
+import {editPost, editSection, listSections} from "@/lib/api";
 import Card from "@/components/UI/Card";
 import Input from "@/components/UI/Input";
-import Link from "next/link";
 import Button from "@/components/UI/Button";
+import Image from 'next/image'
+import {PostProps} from "@/types/PostProps";
 
-const EditPostForm: FC<{ post: Post }> = ({post}) => {
+
+const EditPostForm: FC<PostProps> = ({post}) => {
 
 
+    const [sections, setSections] = useState<Section[]>([]);
     const [formState, setFormState] = useState({...post})
-    const [error, setError] = useState("")
+    const [img, setImg] = useState<File>();
+
+    const getSections = async () => {
+        try {
+            return await listSections(post.id)
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    useEffect(() => {
+        getSections().then((sections) => {
+            setSections(sections.data)
+        })
+    }, [post.id])
+
+    console.log(sections)
+
 
     const router = useRouter();
 
@@ -22,64 +41,76 @@ const EditPostForm: FC<{ post: Post }> = ({post}) => {
 
         try {
             await editPost(formState)
+            for (const section of sections) {
+                await editSection(section);
+            }
             router.replace("/posts")
         } catch (e) {
-            setError("Missing properties")
+            console.log(e)
         } finally {
             setFormState({...formState})
         }
     }, [
-        formState.name,
-        formState.category,
+        {...formState}
     ])
+
 
     return (
         <Card>
-            <div className="w-full">
-                <div className="text-center">
-                    <h2 className="text-3xl mb-2">Edit post</h2>
-                    <p className="tex-lg text-black/25">Fill the informations</p>
-                </div>
-                <form onSubmit={handleSubmit} className="py-10 w-full">
-                    <div className="flex flex-col space-y-6 mb-8 justify-between">
-                        <div className="pr-2">
-                            <div className="text-lg mb-4 ml-2 text-black/50">
-                                Name
-                            </div>
+            <div className="text-4xl mb-6">Edit Post</div>
+            <form className="flex flex-col space-y-6" onSubmit={handleSubmit}>
+                <Input
+                    placeholder="Name"
+                    className={'bg-white'}
+                    value={formState.name}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setFormState((prevState) => ({
+                            ...prevState,
+                            name: e.target.value,
+                        }))
+                    }
+                />
+                <Input
+                    placeholder="Category"
+                    value={formState.category}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setFormState((prevState) => ({
+                            ...prevState,
+                            category: e.target.value,
+                        }))
+                    }
+                />
+                <div className={'text-xl !mt-12'}>Sections</div>
+
+                {sections && sections.map((value, index) => {
+                    return (
+                        <div key={index}>
+
                             <Input
-                                required
-                                placeholder="First Name"
-                                value={formState.name}
-                                className="border-solid border-gray border-2 px-6 py-2 text-lg rounded-3xl w-full"
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setFormState((s) => ({ ...s, name: e.target.value }))
-                                }
+                                placeholder="Subtitle"
+                                value={sections[index].subTitle || ""}
+                                className={'mb-6'}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    const newSections = [...sections];
+                                    newSections[index].subTitle = e.target.value;
+                                    setSections(newSections);
+                                }}
                             />
-                        </div>
-                        <div className="pl-2">
-                            <div className="text-lg mb-4 ml-2 text-black/50">Category</div>
                             <Input
-                                required
-                                placeholder="Last Name"
-                                value={formState.category}
-                                className="border-solid border-gray border-2 px-6 py-2 text-lg rounded-3xl w-full"
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setFormState((s) => ({ ...s, category: e.target.value }))
-                                }
+                                placeholder="Paragraph"
+                                value={sections[index].paragraph || ""}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    const newSections = [...sections];
+                                    newSections[index].paragraph = e.target.value;
+                                    setSections(newSections);
+                                }}
                             />
-                        </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <div>
-                        </div>
-                        <div>
-                            <Button type="submit" intent="primary">
-                                Edit
-                            </Button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+                        </div>)
+                })}
+
+                <Image alt={""} sizes={"50vw"} width={400} height={400} src={formState.img ?? '/placeholder.png'}/>
+                <Button type="submit">Update</Button>
+            </form>
         </Card>
     );
 };

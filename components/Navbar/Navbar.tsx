@@ -46,7 +46,7 @@ const Navbar = (props: any) => {
 
     return (
         <div
-            className={`fixed z-[800] w-screen lg:py-6 py-4  top-0 transform translate-x-1/2 -left-1/2 ${
+            className={`fixed z-[800] w-screen lg:py-6 py-4  top-0 transform translate-x-1/2 -left-1/2  z-[999]${
                 isScrolled ? 'bg-white' : ''
             } duration-500`}
         >

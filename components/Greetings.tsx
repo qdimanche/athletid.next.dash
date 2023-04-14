@@ -1,13 +1,11 @@
-import { getUserFromCookie } from "@/lib/auth";
-import { cookies } from "next/headers";
-import Button from "./UI/Button";
+import {getUserFromCookie} from "@/lib/auth";
+import {cookies} from "next/headers";
 import Card from "./UI/Card";
-import { delay } from "@/lib/async";
+import {delay} from "@/lib/async";
 
 const getData = async () => {
     await delay(4000)
-    const user = await getUserFromCookie(cookies())
-    return user
+    return await getUserFromCookie(cookies())
 }
 
 const Greeting = async () => {

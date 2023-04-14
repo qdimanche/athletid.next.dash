@@ -1,16 +1,17 @@
-import { db } from "@/lib/db";
+import {db} from "@/lib/db";
 import {NextApiRequest, NextApiResponse} from "next";
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
 
         // Créer un nouveau post avec l'utilisateur en tant qu'auteur
-        await db.post.update({
+        await db.section.updateMany({
             where: {
-                id: req.body.id
+                postId: req.body.postId
             },
             data: {
-                name: req.body.name,
-                category: req.body.category,
+                subTitle: req.body.subTitle,
+                paragraph: req.body.paragraph,
             },
         });
 

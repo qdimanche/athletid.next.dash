@@ -18,7 +18,7 @@ async function Page() {
 
     return (
         <div>
-            <div className={'flex flex-col md:flex-row justify-between md:items-center mb-medium md:mb-mediumXl space-y-4 md:space-y-0'}>
+            <div className={'flex justify-between items-center mb-medium md:mb-mediumXl'}>
                 <h1 className={''}>All posts</h1>
                 <NewPost/>
             </div>

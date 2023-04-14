@@ -4,6 +4,9 @@ const nextConfig = {
     appDir: true,
     serverComponentsExternalPackages: ['bcrypt'],
   },
+  images: {
+    domains: ['res.cloudinary.com']
+  }
 }
 
 module.exports = nextConfig
