@@ -31,16 +31,31 @@ const EditPostForm: FC<PostProps> = ({post}) => {
         })
     }, [post.id])
 
-    console.log(sections)
+
+/*    useEffect(() => {
+        // Mettre à jour la propriété img de formState lorsque img change
+        setFormState((prevState) => ({
+            ...prevState,
+            img: img,
+        }));
+    }, [img]);*/
 
 
     const router = useRouter();
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (files && files.length > 0) {
+            setImg(files[0]);
+        }
+    };
+
 
     const handleSubmit = useCallback(async (e: any) => {
         e.preventDefault()
 
         try {
-            await editPost(formState)
+            await editPost(formState, img)
             for (const section of sections) {
                 await editSection(section);
             }
@@ -109,6 +124,9 @@ const EditPostForm: FC<PostProps> = ({post}) => {
                 })}
 
                 <Image alt={""} sizes={"50vw"} width={400} height={400} src={formState.img ?? '/placeholder.png'}/>
+                <Input className={'!p-1'} type={"file"} value={undefined}
+                       onChange={handleFileChange}
+                />
                 <Button type="submit">Update</Button>
             </form>
         </Card>

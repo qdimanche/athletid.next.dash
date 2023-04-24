@@ -15,7 +15,6 @@ async function Page() {
 
     const {posts} = await getData()
 
-
     return (
         <div>
             <div className={'flex justify-between items-center mb-medium md:mb-mediumXl'}>

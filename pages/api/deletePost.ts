@@ -1,13 +1,19 @@
-import { db } from "@/lib/db";
+import {db} from "@/lib/db";
 import {NextApiRequest, NextApiResponse} from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
 
+        await db.section.deleteMany({
+            where: {
+                postId: req.body.postId
+            }
+        })
+
         // Créer un nouveau post avec l'utilisateur en tant qu'auteur
         await db.post.delete({
             where: {
-                id: req.body
+                id: req.body.postId
             }
         });
 

@@ -24,6 +24,7 @@ async function main() {
             posts: {
                 create: new Array(5).fill(1).map((_, i) => ({
                     name: `Project ${i}`,
+                    category: `Project ${i}`,
                     status: getRandomPostStatus(),
                 })),
             },
