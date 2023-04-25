@@ -1,17 +1,20 @@
 import {NextRequest, NextResponse} from "next/server";
 import {jwtVerify} from "jose";
-import {deleteCookie, setCookie} from "cookies-next";
-import {destroyCookie} from "nookies";
 
 const PUBLIC_FILE = /\.(.*)$/;
 
 // @ts-ignore
 const verifyJWT = async (jwt) => {
-    const {payload} = await jwtVerify(
-        jwt,
-        new TextEncoder().encode(process.env.JWT_SECRET)
-    );
-    return payload;
+
+    if (process.env.JWT_SECRET) {
+        const {payload} = await jwtVerify(
+            jwt,
+            new TextEncoder().encode(process.env.JWT_SECRET)
+        );
+        return payload;
+    }else {
+        throw new Error('JWT Secret Key undefined');
+    }
 };
 
 // @ts-ignore
