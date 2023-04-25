@@ -1,5 +1,6 @@
 import { db } from "@/lib/db";
 import {NextApiRequest, NextApiResponse} from "next";
+import slugify from "slugify";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
 
@@ -12,6 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 name: req.body.name,
                 category: req.body.category,
                 img: req.body.imageUrl,
+                slug: slugify(req.body.name),
                 status: req.body.status
             },
         });
