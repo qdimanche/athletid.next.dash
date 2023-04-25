@@ -1,9 +1,8 @@
-import React from "react";
+import React, {ReactNode} from "react";
 import '@/styles/global.css';
-import {Props} from "@/types/Props";
 import Navbar from "@/components/Navbar/Navbar";
 
-function DashboardRootLayout({children}: Props) {
+function DashboardRootLayout({children}: { children : ReactNode }) {
 
     return (
         <html lang={"en"}>

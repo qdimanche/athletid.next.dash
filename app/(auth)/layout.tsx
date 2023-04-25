@@ -1,8 +1,8 @@
-import React from "react";
+import React, {ReactNode} from "react";
 import "@/styles/global.css";
 import {Props} from "@/types/Props";
 
-function AuthRootLayout({children}: Props) {
+function AuthRootLayout({children} : {children: ReactNode }) {
     return (
         <html lang={"en"}>
         <head/>
