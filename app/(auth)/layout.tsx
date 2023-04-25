@@ -1,6 +1,5 @@
 import React, {ReactNode} from "react";
 import "@/styles/global.css";
-import {Props} from "@/types/Props";
 
 function AuthRootLayout({children} : {children: ReactNode }) {
     return (
