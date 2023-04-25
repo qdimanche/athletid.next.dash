@@ -1,7 +1,7 @@
 import clsx from "clsx";
-import {Props} from "@/types/Props";
+import {ReactNode} from "react";
 
-const Card = ({ className, children }:Props) => {
+const Card = ({ className, children }: { className: string, children : ReactNode }) => {
     return (
         <div
             className={clsx(

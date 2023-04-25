@@ -1,10 +1,14 @@
-import {FetcherProps} from "@/types/FetcherProps";
 import slugify from "slugify";
 import axios from "axios";
-import {Post, Section} from ".prisma/client";
+import {Section} from ".prisma/client";
 
 
-const fetcher = async ({url, method, body, json = true}: FetcherProps) => {
+const fetcher = async ({url, method, body, json = true}: {
+    url: string,
+    method: string,
+    body: object,
+    json?: boolean
+}) => {
     const res = await fetch(url, {
         method,
         body: JSON.stringify(body),

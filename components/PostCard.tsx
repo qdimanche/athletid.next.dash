@@ -7,11 +7,16 @@ import {useRouter} from "next/navigation";
 import {deletePost} from "@/lib/api";
 import {FiEdit2} from "react-icons/fi";
 import {AiOutlineDelete} from "react-icons/ai";
-import {PostProps} from "@/types/PostProps";
 
 
 
-const PostCard: FC<PostProps> = ({post}) => {
+
+const PostCard: FC<{
+    post: Omit<Post, "createdAt" | "updatedAt"> & {
+        createdAt: string;
+        updatedAt: string;
+    };
+}> = ({post}) => {
 
     const router = useRouter()
 

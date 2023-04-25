@@ -1,16 +1,20 @@
 'use client'
 import React, {FC, useCallback, useEffect, useState} from 'react';
-import {Section} from ".prisma/client";
+import {Post, Section} from ".prisma/client";
 import {useRouter} from "next/navigation";
 import {editPost, editSection, listSections} from "@/lib/api";
 import Card from "@/components/UI/Card";
 import Input from "@/components/UI/Input";
 import Button from "@/components/UI/Button";
 import Image from 'next/image'
-import {PostProps} from "@/types/PostProps";
 
 
-const EditPostForm: FC<PostProps> = ({post}) => {
+const EditPostForm: FC<{
+    post: Omit<Post, "createdAt" | "updatedAt"> & {
+        createdAt: string;
+        updatedAt: string;
+    };
+}> = ({post}) => {
 
 
     const [sections, setSections] = useState<Section[]>([]);
