@@ -2,7 +2,6 @@ import {FetcherProps} from "@/types/FetcherProps";
 import slugify from "slugify";
 import axios from "axios";
 import {Post, Section} from ".prisma/client";
-import cloudinary from "cloudinary";
 
 
 const fetcher = async ({url, method, body, json = true}: FetcherProps) => {
@@ -44,7 +43,7 @@ export const logout = () => {
 };
 
 
-export const createNewPost = async (name: string, category: string, img: File) => {
+export const createNewPost = async (name: string, category: string, img: File, status: string) => {
 
     // Upload the image to Cloudinary and get the URL
     const formData = new FormData();
@@ -65,6 +64,7 @@ export const createNewPost = async (name: string, category: string, img: File) =
             name: name,
             category: category,
             img: imageUrl,
+            status: status,
             slug: slugify(name),
         },
     })
@@ -99,7 +99,17 @@ export const listSections = (postId: string) => {
     });
 };
 
-export const editPost = async (post: Post, img: any) => {
+export const editPost = async (post: {
+    createdAt: string;
+    img: string | null;
+    name: string;
+    id: string;
+    category: string;
+    authorId: string;
+    slug: string;
+    status: string;
+    updatedAt: string
+}, img: any) => {
 
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},

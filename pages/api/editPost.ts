@@ -12,6 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 name: req.body.name,
                 category: req.body.category,
                 img: req.body.imageUrl,
+                status: req.body.status
             },
         });
 

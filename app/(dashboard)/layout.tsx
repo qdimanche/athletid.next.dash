@@ -13,7 +13,6 @@ function DashboardRootLayout({children}: Props) {
             <Navbar/>
             {children}
         </div>
-        <div id={'modal'} className={'fixed left-0 !max-w-screen'}></div>
         </body>
         </html>
     );

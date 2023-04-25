@@ -17,13 +17,19 @@ export default async function signin(
 
         if (!user) {
             res.status(401);
-            res.json({ error: "Invalid login" });
+            res.json({ error: "" });
             return;
         }
 
-        const isUser = await comparePasswords(req.body.password, user.password);
+        const isUser = async () => {
+            try {
+                return await comparePasswords(req.body.password, user.password);
+            }catch (e) {
+                console.log(e)
+            }
+        }
 
-        if (isUser) {
+        if (await isUser) {
             const jwt = await createJWT(user);
             res.setHeader(
                 "Set-Cookie",

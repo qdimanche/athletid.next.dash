@@ -32,13 +32,13 @@ const EditPostForm: FC<PostProps> = ({post}) => {
     }, [post.id])
 
 
-/*    useEffect(() => {
-        // Mettre à jour la propriété img de formState lorsque img change
-        setFormState((prevState) => ({
-            ...prevState,
-            img: img,
-        }));
-    }, [img]);*/
+    /*    useEffect(() => {
+            // Mettre à jour la propriété img de formState lorsque img change
+            setFormState((prevState) => ({
+                ...prevState,
+                img: img,
+            }));
+        }, [img]);*/
 
 
     const router = useRouter();
@@ -69,6 +69,8 @@ const EditPostForm: FC<PostProps> = ({post}) => {
         {...formState}
     ])
 
+    console.log(formState)
+
 
     return (
         <Card>
@@ -95,6 +97,22 @@ const EditPostForm: FC<PostProps> = ({post}) => {
                         }))
                     }
                 />
+                <select
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                        setFormState((prevState) => ({
+                            ...prevState,
+                            status: e.target.value,
+                        }))
+                    }
+                    value={formState.status}
+                    className={"p-4 text-lg rounded-small w-full !border-0"}
+                >
+                    <option value={"DRAFT"}>DRAFT
+                    </option>
+                    <option value="PUBLISHED">PUBLISHED
+                    </option>
+                </select>
+
                 <div className={'text-xl !mt-12'}>Sections</div>
 
                 {sections && sections.map((value, index) => {

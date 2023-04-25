@@ -17,6 +17,10 @@ const Navbar = (props: any) => {
         setIsClickCounter(clickCounter + 1);
     }
 
+    useEffect(() => {
+        clickCounter % 2 ? document.body.style.overflow = "hidden" : document.body.style.overflow = "visible";
+    }, [clickCounter])
+
     const router = useRouter();
 
     const handleDisconnect = async () => {
@@ -46,7 +50,7 @@ const Navbar = (props: any) => {
 
     return (
         <div
-            className={`fixed z-[800] w-screen lg:py-6 py-4  top-0 transform translate-x-1/2 -left-1/2  z-[999]${
+            className={`fixed z-[1] w-screen lg:py-6 py-4  top-0 transform translate-x-1/2 -left-1/2 ${
                 isScrolled ? 'bg-white' : ''
             } duration-500`}
         >
