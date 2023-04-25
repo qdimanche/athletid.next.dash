@@ -1,12 +1,10 @@
 import React, {Suspense} from 'react';
 import Greetings from "@/components/Greetings";
 import GreetingsSkeleton from "@/components/GreetingsSkeleton";
-import {NewPost} from "@/components/NewPost";
 import {delay} from "@/lib/async";
 import {getUserFromCookie} from "@/lib/auth";
 import {cookies} from "next/headers";
 import {db} from "@/lib/db";
-import Link from "next/link";
 import {NextRequest, NextResponse} from "next/server";
 
 

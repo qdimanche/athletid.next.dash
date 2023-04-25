@@ -1,13 +1,4 @@
 import { db } from "@/lib/db";
-import { POST_STATUS } from "@prisma/client";
-
-const getRandomPostStatus = () => {
-    const statuses = [
-        POST_STATUS.PUBLISHED,
-        POST_STATUS.DRAFT,
-    ];
-    return statuses[Math.floor(Math.random() * statuses.length)];
-};
 
 async function main() {
     const randomString = Math.random().toString(12).substring(11);
@@ -25,7 +16,6 @@ async function main() {
                 create: new Array(5).fill(1).map((_, i) => ({
                     name: `Project ${i}`,
                     category: `Project ${i}`,
-                    status: getRandomPostStatus(),
                 })),
             },
         },
