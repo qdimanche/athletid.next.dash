@@ -73,8 +73,6 @@ const EditPostForm: FC<{
         {...formState}
     ])
 
-    console.log(formState)
-
 
     return (
         <Card>

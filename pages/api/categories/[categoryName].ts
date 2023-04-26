@@ -15,7 +15,7 @@ export default async function signin(
     const category = categories.find(categoryName => categoryName)
 
     if (category) {
-        res.json({data: category})
+        res.json(category)
     } else {
         res.status(401);
         res.json({error: "Invalid postId"});

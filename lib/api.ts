@@ -128,6 +128,8 @@ export const editPost = async (post: {
 
     const postWithNewImage = {...post, imageUrl}
 
+    console.log(postWithNewImage)
+
     return fetcher({
         url: "/api/editPost",
         method: "POST",

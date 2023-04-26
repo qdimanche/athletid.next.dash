@@ -16,7 +16,7 @@ export default async function signin(
     const categories: string[] = posts.map((obj: Post) => obj.category);
 
     if (categories) {
-        res.json({data: categories})
+        res.json(categories)
     } else {
         res.status(401);
         res.json({error: "No categories"});

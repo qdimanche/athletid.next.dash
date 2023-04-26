@@ -9,7 +9,7 @@ export default async function signin(
     const sections = await db.section.findMany();
 
     if (sections) {
-        res.json({data: sections})
+        res.json(sections)
     } else {
         res.status(401);
         res.json({error: "No posts"});

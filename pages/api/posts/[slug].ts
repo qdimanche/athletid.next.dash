@@ -15,7 +15,7 @@ export default async function signin(
     });
 
     if (post) {
-        res.json({data: post})
+        res.json(post)
     } else {
         res.status(401);
         res.json({error: "Invalid postId"});
