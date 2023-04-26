@@ -6,10 +6,10 @@ export default async function signin(
     res: NextApiResponse
 ) {
 
-    const sections = await db.section.findMany();
+    const posts = await db.post.findMany();
 
-    if (sections) {
-        res.json(sections)
+    if (posts) {
+        res.json(posts)
     } else {
         res.status(401);
         res.json({error: "No posts"});
