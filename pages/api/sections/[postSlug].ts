@@ -6,12 +6,12 @@ export default async function signin(
     res: NextApiResponse
 ) {
 
-    const {postId} = req.query
+    const {postSlug} = req.query
 
     const sections = await db.section.findMany({
         where: {
             postId:{
-                equals: postId?.toString()
+                equals: postSlug?.toString()
             },
         },
     });
