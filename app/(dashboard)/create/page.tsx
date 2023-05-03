@@ -6,6 +6,7 @@ import {Section} from ".prisma/client";
 import {createNewPost, createNewSections} from "@/lib/api";
 import Card from "@/components/UI/Card";
 import {useRouter} from "next/navigation";
+import TextArea from "@/components/UI/TextArea";
 
 const Page = () => {
 
@@ -98,10 +99,10 @@ const Page = () => {
                                         setSections(newSections);
                                     }}
                                 />
-                                <Input
+                                <TextArea
                                     placeholder="Paragraph"
                                     value={sections[index].paragraph || ""}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                                         const newSections = [...sections];
                                         newSections[index].paragraph = e.target.value;
                                         setSections(newSections);
