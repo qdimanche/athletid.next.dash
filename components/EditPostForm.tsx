@@ -7,6 +7,7 @@ import Card from "@/components/UI/Card";
 import Input from "@/components/UI/Input";
 import Button from "@/components/UI/Button";
 import Image from 'next/image'
+import TextArea from "@/components/UI/TextArea";
 
 
 const EditPostForm: FC<{
@@ -131,10 +132,10 @@ const EditPostForm: FC<{
                                     setSections(newSections);
                                 }}
                             />
-                            <Input
+                            <TextArea
                                 placeholder="Paragraph"
                                 value={sections[index].paragraph || ""}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
                                     const newSections = [...sections];
                                     newSections[index].paragraph = e.target.value;
                                     setSections(newSections);

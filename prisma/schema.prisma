@@ -46,7 +46,7 @@ model Post {
 model Section {
   id        String @id @default(uuid())
   subTitle  String
-  paragraph String
+  paragraph String @db.VarChar(10000)
 
   postId String
   post   Post   @relation(fields: [postId], references: [id])

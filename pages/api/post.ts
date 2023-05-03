@@ -15,6 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 category: req.body.category,
                 img: req.body.img,
                 slug: req.body.slug,
+                status : req.body.status,
                 authorId: user.id,
             },
         });

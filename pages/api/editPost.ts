@@ -3,8 +3,6 @@ import {NextApiRequest, NextApiResponse} from "next";
 import slugify from "slugify";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-
-        // Créer un nouveau post avec l'utilisateur en tant qu'auteur
         await db.post.update({
             where: {
                 id: req.body.id
@@ -12,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             data: {
                 name: req.body.name,
                 category: req.body.category,
-                img: req.body.imageUrl,
+                img: req.body.imageUrl ? req.body.imageUrl : req.body.img ,
                 slug: slugify(req.body.name),
                 status: req.body.status
             },
@@ -20,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         res.json({data: {message: "ok"}});
     } catch (error) {
-        console.log("Error:", error); // Afficher l'erreur en cas de problème
+        console.log("Error:", error);
         res.status(500).json({data: {message: "Internal Server Error"}});
     }
 }

@@ -49,7 +49,6 @@ export const logout = () => {
 
 export const createNewPost = async (name: string, category: string, img: File, status: string) => {
 
-    // Upload the image to Cloudinary and get the URL
     const formData = new FormData();
     formData.append("file", img);
     formData.append("upload_preset", "ml_default");
@@ -58,7 +57,7 @@ export const createNewPost = async (name: string, category: string, img: File, s
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
     };
 
-    const res = await axios.post("https://api.cloudinary.com/v1_1/dxplbf0t0/image/upload", formData, config);
+    const res = await axios.post("https://api.cloudinary.com/v1_1/ddjdkkktr/image/upload", formData, config);
     const imageUrl = res.data.secure_url;
 
     return await fetcher({
@@ -73,6 +72,47 @@ export const createNewPost = async (name: string, category: string, img: File, s
         },
     })
 }
+
+export const editPost = async (post: {
+    createdAt: string;
+    img: string | null;
+    name: string;
+    id: string;
+    category: string;
+    authorId: string;
+    slug: string;
+    status: string;
+    updatedAt: string
+}, img: any) => {
+
+    const config = {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+    };
+
+    const formData = new FormData();
+    formData.append("file", img);
+    formData.append("upload_preset", "ml_default");
+
+    if (img) {
+        const res = await axios.post("https://api.cloudinary.com/v1_1/ddjdkkktr/image/upload", formData, config)
+        let imageUrl = res.data.secure_url
+
+        const postWithNewImage = {...post, imageUrl}
+
+        return fetcher({
+            url: "/api/editPost",
+            method: "POST",
+            body: JSON.parse(JSON.stringify(postWithNewImage)),
+        });
+    }
+
+    return fetcher({
+        url: "/api/editPost",
+        method: "POST",
+        body: JSON.parse(JSON.stringify(post)),
+    });
+
+};
 
 export const createNewSections = async (postId: string, sections: Section[]) => {
 
@@ -103,37 +143,6 @@ export const listSections = (postId: string) => {
     });
 };
 
-export const editPost = async (post: {
-    createdAt: string;
-    img: string | null;
-    name: string;
-    id: string;
-    category: string;
-    authorId: string;
-    slug: string;
-    status: string;
-    updatedAt: string
-}, img: any) => {
-
-    const config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-    };
-
-    const formData = new FormData();
-    formData.append("file", img);
-    formData.append("upload_preset", "ml_default");
-
-    const res = await axios.post("https://api.cloudinary.com/v1_1/dxplbf0t0/image/upload", formData, config);
-    const imageUrl = res.data.secure_url;
-
-    const postWithNewImage = {...post, imageUrl}
-
-    return fetcher({
-        url: "/api/editPost",
-        method: "POST",
-        body: JSON.parse(JSON.stringify(postWithNewImage)),
-    });
-};
 
 export const editSection = (section: Object) => {
 
