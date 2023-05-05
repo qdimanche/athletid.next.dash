@@ -180,7 +180,7 @@ const EditPostForm: FC<{
                                 </div>)
                         })}
 
-                        <Image alt={""} sizes={"50vw"} width={400} height={400}
+                        <Image alt={""} sizes={"60vw"} width={400} height={400}
                                src={formState.img ?? '/placeholder.png'}/>
                         <Input className={'!p-1'} type={"file"} value={undefined}
                                onChange={handleFileChange}
