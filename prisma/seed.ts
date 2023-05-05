@@ -12,12 +12,6 @@ async function main() {
             firstName: "User",
             lastName: "Person",
             password: "password",
-            posts: {
-                create: new Array(5).fill(1).map((_, i) => ({
-                    name: `Project ${i}`,
-                    category: `Project ${i}`,
-                })),
-            },
         },
         include: {
             posts: true,
