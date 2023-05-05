@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             },
             data: {
                 name: req.body.name,
-                category: req.body.category,
+                categoryId: req.body.categoryId,
                 img: req.body.imageUrl ? req.body.imageUrl : req.body.img ,
                 slug: slugify(req.body.name),
                 status: req.body.status

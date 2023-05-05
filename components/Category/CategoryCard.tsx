@@ -1,28 +1,21 @@
 'use client'
-import Card from "./UI/Card";
+import Card from "../UI/Card";
 import {FC} from "react";
-import {Post} from ".prisma/client";
+import {Category} from ".prisma/client";
 import Button from "@/components/UI/Button";
 import {useRouter} from "next/navigation";
-import {deletePost} from "@/lib/api";
+import {deleteCategory, deletePost} from "@/lib/api";
 import {FiEdit2} from "react-icons/fi";
 import {AiOutlineDelete} from "react-icons/ai";
 
 
+const CategoryCard: FC<{ category: Category }> = ({category}) => {
 
-
-const PostCard: FC<{
-    post: Omit<Post, "createdAt" | "updatedAt"> & {
-        createdAt: string;
-        updatedAt: string;
-    };
-}> = ({post}) => {
-
-    const router = useRouter()
+    const router = useRouter();
 
     async function deleteHandleSubmit() {
         try {
-            await deletePost(post.id)
+            await deleteCategory(category.id)
             router.refresh()
         } catch (e) {
             console.log(e)
@@ -32,10 +25,10 @@ const PostCard: FC<{
     return (
         <Card className={'bg-white px-6'}>
             <div className="grid grid-cols-2 md:flex space-x-4 justify-between items-center ">
-                <span className="text-gray-600 !text-lg">{post.name}</span>
+                <span className="text-gray-600 !text-lg">{category.name}</span>
                 <div className={'space-x-4'}>
                     <Button className={'!p-3'} intent={"primary"} onClick={() => {
-                        router.replace(`/edit/post/${post.id}`)
+                        router.replace(`/categories/edit/${category.id}`)
                     }}>{<FiEdit2 size={16} color={"white"}/>}</Button>
                     <Button className={'!p-3'} intent={"secondary"} onClick={async (): Promise<void> => {
                         await deleteHandleSubmit()
@@ -46,4 +39,4 @@ const PostCard: FC<{
     );
 };
 
-export default PostCard;
+export default CategoryCard;

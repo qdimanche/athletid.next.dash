@@ -22,10 +22,11 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
     const {pathname} = req.nextUrl;
 
     const jwt = req.cookies.get('jwt_cookie_id');
+    const authorId = req.cookies.get('author_id');
 
 
     if (pathname === "/signin") {
-        if (jwt) {
+        if (jwt && authorId) {
             req.nextUrl.pathname = "/home";
             return NextResponse.redirect(req.nextUrl);
         } else {

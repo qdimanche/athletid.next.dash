@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { comparePasswords, createJWT } from "@/lib/auth";
 import { serialize } from "cookie";
 import bcrypt from "bcrypt";
+import {setCookie} from "cookies-next";
 
 export default async function signin(
     req: NextApiRequest,
@@ -29,17 +30,17 @@ export default async function signin(
             }
         }
 
-        if (await isUser) {
+        if (await isUser()) {
             const jwt = await createJWT(user);
-            res.setHeader(
-                "Set-Cookie",
-                serialize(process.env.JWT_COOKIE ?? 'jwt_cookie_id', jwt, {
-                    httpOnly: true,
-                    path: "/",
-                    maxAge: 60 * 60 * 24 * 7,
-                    secure: true
-                })
-            );
+
+
+
+            setCookie('jwt_cookie_id', jwt, { req, res, maxAge: 60 * 60 * 24 });
+
+            if (user){
+                setCookie('author_id', user.id, { req, res, maxAge: 60 * 60 * 24 });
+            }
+
             res.status(201);
             res.end();
         } else {

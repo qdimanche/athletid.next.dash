@@ -9,20 +9,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const jwt = cookies["jwt_cookie_id"];
         const user = await validateJWT(jwt);
 
-        const newPost = await db.post.create({
+        const newCategory = await db.category.create({
             data: {
                 name: req.body.name,
-                category: req.body.category,
-                img: req.body.img,
-                slug: req.body.slug,
-                status : req.body.status,
-                authorId: user.id,
             },
         });
 
-        res.json({data: newPost});
+        res.json({data: newCategory});
     } catch (error) {
-        console.log("Error:", error); // Afficher l'erreur en cas de problème
+        console.log("Error:", error);
         res.status(500).json({data: {message: "Internal Server Error"}});
     }
 }

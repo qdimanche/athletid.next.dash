@@ -30,24 +30,28 @@ const fetcher = async ({url, method, body, json = true}: {
 
 export const signin = async (user: Object) => {
 
-    await fetcher({
-        url: "/api/signin",
-        method: "POST",
-        body: user,
-    })
+    try {
+        await fetcher({
+            url: "/api/authentification/signin",
+            method: "POST",
+            body: user,
+        })
+    }catch (error) {
+        console.log(error)
+    }
 }
 
 export const logout = () => {
 
     return fetcher({
-        url: "/api/logout",
+        url: "/api/authentification/logout",
         method: "POST",
         body: JSON.parse(JSON.stringify('user')),
     });
 };
 
 
-export const createNewPost = async (name: string, category: string, img: File, status: string) => {
+export const createNewPost = async (name: string, categoryId: string | undefined, img: File, status: string) => {
 
     const formData = new FormData();
     formData.append("file", img);
@@ -61,11 +65,11 @@ export const createNewPost = async (name: string, category: string, img: File, s
     const imageUrl = res.data.secure_url;
 
     return await fetcher({
-        url: "/api/post",
+        url: "/api/posts/createPost",
         method: "POST",
         body: {
             name: name,
-            category: category,
+            categoryId: categoryId,
             img: imageUrl,
             status: status,
             slug: slugify(name),
@@ -78,9 +82,9 @@ export const editPost = async (post: {
     img: string | null;
     name: string;
     id: string;
-    category: string;
     authorId: string;
     slug: string;
+    categoryId: string;
     status: string;
     updatedAt: string
 }, img: any) => {
@@ -100,18 +104,50 @@ export const editPost = async (post: {
         const postWithNewImage = {...post, imageUrl}
 
         return fetcher({
-            url: "/api/editPost",
+            url: "/api/posts/editPost",
             method: "POST",
             body: JSON.parse(JSON.stringify(postWithNewImage)),
         });
     }
 
     return fetcher({
-        url: "/api/editPost",
+        url: "/api/posts/editPost",
         method: "POST",
         body: JSON.parse(JSON.stringify(post)),
     });
 
+};
+
+export const createNewCategory = async (name: string) => {
+
+    return await fetcher({
+        url: "/api/categories/createCategory",
+        method: "POST",
+        body: {
+            name: name,
+        },
+    })
+}
+
+export const deleteCategory = (categoryId: string) => {
+
+    return fetcher({
+        url: "/api/categories/deleteCategory",
+        method: "POST",
+        body: {categoryId},
+    });
+};
+
+
+export const editCategory = async (category: {
+    name: string;
+}) => {
+
+    return fetcher({
+        url: "/api/categories/editCategory",
+        method: "POST",
+        body: JSON.parse(JSON.stringify(category)),
+    });
 };
 
 export const createNewSections = async (postId: string, sections: Section[]) => {
@@ -119,7 +155,7 @@ export const createNewSections = async (postId: string, sections: Section[]) => 
     try {
         return Promise.all(sections.map(section => {
             return fetcher({
-                url: "/api/section",
+                url: "/api/sections/createSection",
                 method: "POST",
                 body: {
                     postId: postId,
@@ -137,7 +173,7 @@ export const createNewSections = async (postId: string, sections: Section[]) => 
 export const listSections = (postId: string) => {
 
     return fetcher({
-        url: "/api/listSections",
+        url: "/api/sections/[postId]",
         method: "POST",
         body: {postId},
     });
@@ -147,9 +183,9 @@ export const listSections = (postId: string) => {
 export const editSection = (section: Object) => {
 
     return fetcher({
-        url: "/api/editSection",
+        url: "/api/sections/editSection",
         method: "POST",
-        body: JSON.parse(JSON.stringify(section)),
+        body: section,
     });
 };
 
@@ -157,8 +193,9 @@ export const editSection = (section: Object) => {
 export const deletePost = (postId: string) => {
 
     return fetcher({
-        url: "/api/deletePost",
+        url: "/api/posts/deletePost",
         method: "POST",
         body: {postId},
     });
 };
+

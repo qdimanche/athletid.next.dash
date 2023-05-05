@@ -11,7 +11,7 @@ export default async function signin(
     const sections = await db.section.findMany({
         where: {
             postId:{
-                equals: postId?.toString()
+                equals: req.body.postId ? req.body.postId : postId?.toString()
             },
         },
     });

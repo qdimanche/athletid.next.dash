@@ -1,5 +1,5 @@
 import {db} from "@/lib/db";
-import EditPostForm from "@/components/EditPostForm";
+import EditPostForm from "@/components/Post/EditPostForm";
 import {Post} from ".prisma/client";
 
 const getData = async (id: any) => {

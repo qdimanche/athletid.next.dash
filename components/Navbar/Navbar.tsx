@@ -71,6 +71,7 @@ const Navbar = (props: any) => {
                     <div className={'lg:block hidden space-x-[60px]'}>
                         <Link href="/">Home</Link>
                         <Link href="/posts">Posts</Link>
+                        <Link href="/categories">Categories</Link>
                         <Button
                             intent={'secondary'}
                             link={'/api/logout'}
@@ -108,6 +109,9 @@ const Navbar = (props: any) => {
                                 </li>
                                 <li className={'text-[38px] opacity-60'}>
                                     <Link href="/posts">Posts</Link>
+                                </li>
+                                <li className={'text-[38px] opacity-60'}>
+                                    <Link href="/categories">Categories</Link>
                                 </li>
                                 <li className={'text-[38px] opacity-60'}>
                                     <div onClick={() => {

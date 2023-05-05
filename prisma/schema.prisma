@@ -26,10 +26,7 @@ model Post {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  category String
-
-  img String?
+  img       String?
 
   authorId String
   author   User   @relation(fields: [authorId], references: [id])
@@ -40,7 +37,11 @@ model Post {
 
   sections Section[]
 
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
   @@index([authorId, id])
+  @@index([categoryId, id])
 }
 
 model Section {
@@ -52,4 +53,12 @@ model Section {
   post   Post   @relation(fields: [postId], references: [id])
 
   @@index([postId, id])
+}
+
+model Category {
+  id   String @id @default(uuid()) @map(name: "undefined_category_id")
+  name String @default("undefined")
+  Post Post[]
+
+  @@unique([name])
 }
