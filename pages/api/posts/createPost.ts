@@ -1,4 +1,3 @@
-
 import {db} from "@/lib/db";
 import {NextApiRequest, NextApiResponse} from "next";
 import {getCookie} from "cookies-next";
