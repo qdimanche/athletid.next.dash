@@ -9,7 +9,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const newPost: Post  = await db.post.create({
             data: {
-                id: "",
                 name: req.body.name,
                 categoryId: req.body.categoryId,
                 img: req.body.img,
