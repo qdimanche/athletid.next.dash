@@ -17,48 +17,40 @@ model User {
   firstName String?
   lastName  String?
   password  String
-  posts     Post[]
+  role      String   @default("EDITOR")
+  Post      Post[]
+}
 
-  role String @default("EDITOR")
+model Category {
+  name String @unique @default("undefined")
+  id   String @id @default(uuid()) @map("undefined_category_id")
+  Post Post[]
 }
 
 model Post {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  img       String?
-
-  authorId String
-  author   User   @relation(fields: [authorId], references: [id])
-
-  name   String
-  slug   String @default("undefined")
-  status String @default("DRAFT")
-
-  sections Section[]
-
+  id         String    @id
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime
+  authorId   String
+  name       String
+  status     String    @default("DRAFT")
+  img        String?
+  slug       String    @default("undefined")
   categoryId String
-  category   Category @relation(fields: [categoryId], references: [id])
+  User       User      @relation(fields: [authorId], references: [id])
+  Category   Category  @relation(fields: [categoryId], references: [id])
+  Section    Section[]
 
   @@index([authorId, id])
   @@index([categoryId, id])
 }
 
 model Section {
-  id        String @id @default(uuid())
+  id        String @id
   subTitle  String
   paragraph String @db.VarChar(10000)
-
-  postId String
-  post   Post   @relation(fields: [postId], references: [id])
+  postId    String
+  Post      Post   @relation(fields: [postId], references: [id])
 
   @@index([postId, id])
-}
-
-model Category {
-  id   String @id @default(uuid()) @map(name: "undefined_category_id")
-  name String @default("undefined")
-  Post Post[]
-
-  @@unique([name])
 }
