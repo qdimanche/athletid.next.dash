@@ -105,7 +105,7 @@ const Navbar = (props: any) => {
                                     Menu
                                 </li>
                                 <li className={'text-[38px] opacity-60'}>
-                                    <Link href="/">Home</Link>
+                                    <Link href="/home">Home</Link>
                                 </li>
                                 <li className={'text-[38px] opacity-60'}>
                                     <Link href="/posts">Posts</Link>
