@@ -8,7 +8,7 @@ function DashboardRootLayout({children}: { children : ReactNode }) {
         <html lang={"en"}>
         <head/>
         <body>
-        <div className={"relative max-w-[350px] md:max-w-[1170px] mx-auto px-4 pt-xl md:pt-2xl h-full"}>
+        <div className={"relative max-w-[350px] md:max-w-[1170px] mx-auto px-4 py-xl md:py-2xl h-full"}>
             <Navbar/>
             {children}
         </div>
