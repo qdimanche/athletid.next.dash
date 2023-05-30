@@ -69,7 +69,7 @@ const Navbar = (props: any) => {
 
                 <div className={`justify-end items-center w-full flex`}>
                     <div className={'lg:block hidden space-x-[60px]'}>
-                        <Link href="/">Home</Link>
+                        <Link href="/home">Home</Link>
                         <Link href="/posts">Posts</Link>
                         <Link href="/categories">Categories</Link>
                         <Button
