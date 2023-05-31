@@ -1,13 +1,14 @@
 'use client'
 import React, {useEffect, useState} from 'react'
 import Link from 'next/link'
-import Button from '../UI/Button'
 import Image from 'next/image'
 import {useIsLargeScreen} from '../Hooks/useMediaQuery'
 import Div100vh from "react-div-100vh";
 import Burger from "./Burger";
 import {logout} from "@/lib/api";
+import DropdownComponent from "@/components/UI/DropdownComponent";
 import {useRouter} from "next/navigation";
+
 
 const Navbar = (props: any) => {
     const [isScrolled, setIsScrolled] = useState(false)
@@ -67,62 +68,55 @@ const Navbar = (props: any) => {
                     </Link>
                 </div>
 
-                <div className={`justify-end items-center w-full flex`}>
-                    <div className={'lg:block hidden space-x-[60px]'}>
-                        <Link href="/">Home</Link>
-                        <Link href="/posts">Posts</Link>
-                        <Link href="/categories">Categories</Link>
-                        <Button
-                            intent={'secondary'}
-                            link={'/api/logout'}
-                        >
-                            Disconnect
-                        </Button>
-                    </div>
+                <div className={'lg:flex hidden justify-end items-center w-full space-x-[60px]'}>
+                    <Link href="/">Home</Link>
+                    <Link href="/posts">Posts</Link>
+                    <Link href="/categories">Categories</Link>
+                    <DropdownComponent/>
+                </div>
 
-                    <Div100vh
+                <Div100vh
+                    className={
+                        clickCounter % 2
+                            ? 'fixed bg-white duration-[1300ms] w-screen top-0 left-0 bottom-0 overflow-hidden z-[400]'
+                            : 'bg-white invisible opacity-0 duration-[300ms] absolute w-screen top-0 left-0 bottom-0 overflow-visible'
+                    }
+                >
+                    <div
                         className={
                             clickCounter % 2
-                                ? 'fixed bg-white duration-[1300ms] w-screen top-0 left-0 bottom-0 overflow-hidden z-[400]'
-                                : 'bg-white invisible opacity-0 duration-[300ms] absolute w-screen top-0 left-0 bottom-0 overflow-visible'
+                                ? 'transform absolute -translate-y-1/2 !top-1/2 flex lg:space-x-40 w-full'
+                                : 'hidden'
                         }
                     >
-                        <div
+                        <ul
                             className={
-                                clickCounter % 2
-                                    ? 'transform absolute -translate-y-1/2 !top-1/2 flex lg:space-x-40 w-full'
-                                    : 'hidden'
+                                'text-left space-y-4 mx-auto'
                             }
                         >
-                            <ul
-                                className={
-                                    'text-left space-y-4 mx-auto'
-                                }
+                            <li
+                                className={'text-[20px] lg:text-[14px]  font-bold lg:!-mb-4'}
                             >
-                                <li
-                                    className={'text-[20px] lg:text-[14px]  font-bold lg:!-mb-4'}
-                                >
-                                    Menu
-                                </li>
-                                <li className={'text-[38px] opacity-60'}>
-                                    <Link href="/home">Home</Link>
-                                </li>
-                                <li className={'text-[38px] opacity-60'}>
-                                    <Link href="/posts">Posts</Link>
-                                </li>
-                                <li className={'text-[38px] opacity-60'}>
-                                    <Link href="/categories">Categories</Link>
-                                </li>
-                                <li className={'text-[38px] opacity-60'}>
-                                    <div onClick={() => {
-                                        handleDisconnect()
-                                    }}>Disconnect
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </Div100vh>
-                </div>
+                                Menu
+                            </li>
+                            <li className={'text-[38px] opacity-60'}>
+                                <Link href="/home">Home</Link>
+                            </li>
+                            <li className={'text-[38px] opacity-60'}>
+                                <Link href="/posts">Posts</Link>
+                            </li>
+                            <li className={'text-[38px] opacity-60'}>
+                                <Link href="/categories">Categories</Link>
+                            </li>
+                            <li className={'text-[38px] opacity-60'}>
+                                <div onClick={() => {
+                                    handleDisconnect()
+                                }}>Disconnect
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </Div100vh>
                 <div className={'z-[900] w-[2rem] lg:hidden'}>
                     <Burger clickCounter={clickCounter} click onClick={() => {
                         handleClick()

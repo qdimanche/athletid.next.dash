@@ -18,6 +18,7 @@ model User {
   lastName  String?
   password  String
   posts     Post[]
+  img       String?
 
   role String @default("EDITOR")
 }

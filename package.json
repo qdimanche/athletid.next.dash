@@ -9,8 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.14",
+    "@heroicons/react": "^2.0.18",
     "@next/font": "13.2.4",
-    "@prisma/client": "^4.14.0-dev.74",
+    "@nextui-org/react": "^1.0.0-beta.13",
+    "@prisma/client": "^4.16.0-dev.5",
     "@types/node": "18.15.11",
     "@types/react": "18.0.33",
     "@types/react-dom": "18.0.11",
@@ -25,13 +28,14 @@
     "cookies-next": "^2.1.1",
     "eslint": "8.37.0",
     "eslint-config-next": "13.2.4",
+    "flowbite": "^1.6.5",
+    "heroicons": "^2.0.18",
     "jose": "^4.13.1",
     "js-cookie": "^3.0.1",
     "next": "13.2.4",
     "next-superjson-plugin": "^0.5.6",
     "nookies": "^2.5.2",
     "prettier": "^2.8.7",
-    "prisma": "^4.14.0-dev.74",
     "react": "18.2.0",
     "react-div-100vh": "^0.7.0",
     "react-dom": "18.2.0",
@@ -52,11 +56,15 @@
     "@types/styled-components": "^5.1.26",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.21",
+    "prisma": "^4.16.0-dev.5",
     "tailwindcss": "^3.3.1"
   },
   "browser": {
     "fs": false,
     "os": false,
     "path": false
+  },
+  "resolutions": {
+    "@types/react": "~17.0.21"
   }
 }

@@ -22,7 +22,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@/prisma/*": ["./prisma/*"]
+      "@/prisma/*": ["./prisma/*"],
+      "react": [ "./node_modules/@types/react" ]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

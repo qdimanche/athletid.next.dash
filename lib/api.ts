@@ -51,6 +51,50 @@ export const logout = () => {
 };
 
 
+export const editUser = async (user: {
+    firstName: string | undefined;
+    lastName: string | undefined;
+    createdAt: string;
+    password: string;
+    img: string | null;
+    role: string;
+    id: string;
+    email: string | undefined;
+    updatedAt: string
+}, img: any) => {
+
+    const config = {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+    };
+
+    const formData = new FormData();
+    formData.append("file", img);
+    formData.append("upload_preset", "ml_default");
+
+    if (img) {
+        const res = await axios.post("https://api.cloudinary.com/v1_1/ddjdkkktr/image/upload", formData, config)
+        let imageUrl = res.data.secure_url
+
+        const postWithNewImage = {...user, imageUrl}
+
+        return fetcher({
+            url: "/api/user/editUser",
+            method: "POST",
+            body: JSON.parse(JSON.stringify(postWithNewImage)),
+        });
+    }
+
+    return fetcher({
+        url: "/api/user/editUser",
+        method: "POST",
+        body: JSON.parse(JSON.stringify(user)),
+    });
+
+};
+
+
+
+
 export const createNewPost = async (name: string, categoryId: string | undefined, img: File, status: string) => {
 
     const formData = new FormData();
@@ -86,8 +130,7 @@ export const editPost = async (post: {
     slug: string;
     categoryId: string;
     status: string;
-    updatedAt: string
-}, img: any) => {
+    updatedAt: string }, img: any) => {
 
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},

@@ -1,11 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+	plugins: [
+		require('flowbite/plugin')
+	],
 	experimental: {
 		appDir: true,
 		serverComponentsExternalPackages: ['bcrypt'],
 	},
 	images: {
-		domains: ['res.cloudinary.com']
+		domains: [
+			'res.cloudinary.com',
+			'images.unsplash.com',
+		]
 	},
 	async headers() {
 		return [
