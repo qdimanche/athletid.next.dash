@@ -27,7 +27,8 @@ const EditPostForm: FC<{
 
     const getSections = async () => {
         try {
-            return await listSections(post.id)
+            const sections = await listSections(post.id);
+            return sections.sort((a:any, b:any) => a.order - b.order);
         } catch (e) {
             console.log(e)
         }
@@ -91,8 +92,7 @@ const EditPostForm: FC<{
         {...formState}
     ])
 
-    console.log(formState)
-
+    sections.sort((a, b) => a.order - b.order);
 
     return (
         <Card>

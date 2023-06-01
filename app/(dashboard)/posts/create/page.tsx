@@ -13,14 +13,13 @@ import Loading from "@/app/(dashboard)/posts/loading";
 const Page = () => {
 
     const router = useRouter()
-
     const [name, setName] = useState("");
     const [status, setStatus] = useState("");
     const [img, setImg] = useState<File>();
     const [isLoad, setIsLoad] = useState(false);
     const [categoryId, setCategoryId] = useState<string>();
     const [imgUrl, setImgUrl] = useState<string | undefined>();
-    const [sections, setSections] = useState<Section[]>([{id: "", postId: "", subTitle: "", paragraph: ""}]);
+    const [sections, setSections] = useState<Section[]>([{id: "", postId: "", subTitle: "", paragraph: "", order: 1}]);
     const [categories, setCategories] = useState<Category[]>([]);
 
 
@@ -40,22 +39,35 @@ const Page = () => {
                 const filteredSections = sections.filter((obj) => {
                     return obj.subTitle.trim() !== "";
                 });
-                await createNewSections(newPost.data.id, filteredSections);
 
-                router.replace("/posts")
+                // Sort the sections by order
+                const sortedSections = filteredSections.sort((a, b) => a.order - b.order);
+
+                await createNewSections(newPost.data.id, sortedSections);
+
+                router.replace("/posts");
             } catch (error) {
-                console.error(error)
+                console.error(error);
             }
         }
     };
 
     const handleAddSection = () => {
         const lastSection = sections[sections.length - 1];
+        const newOrder = lastSection ? lastSection.order + 1 : 1;
+
         if (!lastSection || (lastSection.subTitle.trim() !== "" && lastSection.paragraph.trim() !== "")) {
-            const newSection: Section = {id: "", postId: "", subTitle: "", paragraph: ""};
+            const newSection: Section = {
+                id: "",
+                postId: "",
+                subTitle: "",
+                paragraph: "",
+                order: newOrder
+            };
+
             setSections(prevSections => [...prevSections, newSection]);
         }
-    }
+    };
 
     const getCategories = async () => {
         try {

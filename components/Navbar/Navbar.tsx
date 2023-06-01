@@ -15,6 +15,7 @@ import {User} from "@prisma/client";
 
 const Navbar = (props: any) => {
 
+    console.log(props.user)
 
     const [isScrolled, setIsScrolled] = useState(false)
 
@@ -77,7 +78,7 @@ const Navbar = (props: any) => {
                     <Link href="/">Home</Link>
                     <Link href="/posts">Posts</Link>
                     <Link href="/categories">Categories</Link>
-                    <DropdownComponent image={props.user.img}/>
+                    <DropdownComponent user={props.user}/>
                 </div>
 
                 <Div100vh

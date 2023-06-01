@@ -1,9 +1,6 @@
 import slugify from "slugify";
 import axios from "axios";
 import {Section} from ".prisma/client";
-import {User} from "@prisma/client";
-import {db} from "@/lib/db";
-import {cookies} from "next/headers";
 
 
 const fetcher = async ({url, method, body, json = true}: {
@@ -32,7 +29,6 @@ const fetcher = async ({url, method, body, json = true}: {
 };
 
 
-
 export const signin = async (user: Object) => {
 
     try {
@@ -41,7 +37,7 @@ export const signin = async (user: Object) => {
             method: "POST",
             body: user,
         })
-    }catch (error) {
+    } catch (error) {
         console.log(error)
     }
 }
@@ -98,8 +94,6 @@ export const editUser = async (user: {
 };
 
 
-
-
 export const createNewPost = async (name: string, categoryId: string | undefined, img: File, status: string) => {
 
     const formData = new FormData();
@@ -135,7 +129,8 @@ export const editPost = async (post: {
     slug: string;
     categoryId: string;
     status: string;
-    updatedAt: string }, img: any) => {
+    updatedAt: string
+}, img: any) => {
 
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
@@ -209,6 +204,7 @@ export const createNewSections = async (postId: string, sections: Section[]) => 
                     postId: postId,
                     subTitle: section.subTitle,
                     paragraph: section.paragraph,
+                    order: section.order
                 },
             });
         }))

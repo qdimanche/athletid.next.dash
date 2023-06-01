@@ -29,6 +29,8 @@ async function DashboardRootLayout({children}: { children: ReactNode }) {
 
     const user = await getUser();
 
+    console.log(user)
+
     return (
         <html lang={"en"}>
         <head/>
