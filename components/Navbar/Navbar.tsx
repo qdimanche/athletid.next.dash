@@ -8,14 +8,11 @@ import Burger from "./Burger";
 import {logout} from "@/lib/api";
 import DropdownComponent from "@/components/UI/DropdownComponent";
 import {useRouter} from "next/navigation";
-import {User} from "@prisma/client";
-
 
 
 
 const Navbar = (props: any) => {
 
-    console.log(props.user)
 
     const [isScrolled, setIsScrolled] = useState(false)
 

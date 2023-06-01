@@ -8,7 +8,6 @@ import {useRouter} from "next/navigation";
 
 export default function DropdownComponent(props:any) {
 
-    const router = useRouter();
 
     return (
         <div>
