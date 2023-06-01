@@ -8,9 +8,14 @@ import Burger from "./Burger";
 import {logout} from "@/lib/api";
 import DropdownComponent from "@/components/UI/DropdownComponent";
 import {useRouter} from "next/navigation";
+import {User} from "@prisma/client";
+
+
 
 
 const Navbar = (props: any) => {
+
+
     const [isScrolled, setIsScrolled] = useState(false)
 
     const [clickCounter, setIsClickCounter] = useState(0);
@@ -72,7 +77,7 @@ const Navbar = (props: any) => {
                     <Link href="/">Home</Link>
                     <Link href="/posts">Posts</Link>
                     <Link href="/categories">Categories</Link>
-                    <DropdownComponent/>
+                    <DropdownComponent image={props.user.img}/>
                 </div>
 
                 <Div100vh

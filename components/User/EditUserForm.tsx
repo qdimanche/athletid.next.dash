@@ -6,7 +6,6 @@ import Card from "@/components/UI/Card";
 import Input from "@/components/UI/Input";
 import Button from "@/components/UI/Button";
 import Image from 'next/image'
-import TextArea from "@/components/UI/TextArea";
 import Loading from "@/app/(dashboard)/posts/loading";
 import {User} from "@prisma/client";
 
@@ -41,15 +40,18 @@ const EditUserForm: FC<{
 
         try {
             await editUser(formState, img)
-            router.replace("/profile")
+            router.replace("/home")
         } catch (e) {
             console.log(e)
         } finally {
             setFormState({...formState})
         }
-    }, [
-        {...formState}
-    ])
+    }, [formState, img, router])
+
+    useEffect(() => {
+        setFormState({...user});
+        setIsLoad(true);
+    }, [user]);
 
 
     return (
@@ -61,7 +63,7 @@ const EditUserForm: FC<{
                         <Input
                             placeholder="Firstname"
                             className={'bg-white'}
-                            value={formState.firstName}
+                            value={formState.firstName ?? ""}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                 setFormState((prevState) => ({
                                     ...prevState,
@@ -72,7 +74,7 @@ const EditUserForm: FC<{
                         <Input
                             placeholder="Lastname"
                             className={'bg-white'}
-                            value={formState.lastName}
+                            value={formState.lastName ?? ""}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                 setFormState((prevState) => ({
                                     ...prevState,
@@ -83,7 +85,7 @@ const EditUserForm: FC<{
                         <Input
                             placeholder="Email"
                             className={'bg-white'}
-                            value={formState.email}
+                            value={formState.email ?? ""}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                 setFormState((prevState) => ({
                                     ...prevState,
@@ -92,8 +94,12 @@ const EditUserForm: FC<{
                             }
                         />
 
-                        <Image alt={""} sizes={"60vw"} width={400} height={400}
-                               src={formState.img ?? '/placeholder.png'}/>
+
+                        {formState.img && (
+                            <Image alt={""} sizes={"60vw"} width={200} height={200}
+                                   src={formState.img}/>
+                        )}
+
                         <Input className={'!p-1'} type={"file"} value={undefined}
                                onChange={handleFileChange}
                         />
@@ -105,4 +111,4 @@ const EditUserForm: FC<{
     );
 };
 
-export default EditPostForm;
+export default EditUserForm;

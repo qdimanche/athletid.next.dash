@@ -1,6 +1,9 @@
 import slugify from "slugify";
 import axios from "axios";
 import {Section} from ".prisma/client";
+import {User} from "@prisma/client";
+import {db} from "@/lib/db";
+import {cookies} from "next/headers";
 
 
 const fetcher = async ({url, method, body, json = true}: {
@@ -28,6 +31,8 @@ const fetcher = async ({url, method, body, json = true}: {
 
 };
 
+
+
 export const signin = async (user: Object) => {
 
     try {
@@ -52,14 +57,14 @@ export const logout = () => {
 
 
 export const editUser = async (user: {
-    firstName: string | undefined;
-    lastName: string | undefined;
+    firstName: string | null;
+    lastName: string | null;
     createdAt: string;
     password: string;
     img: string | null;
     role: string;
     id: string;
-    email: string | undefined;
+    email: string;
     updatedAt: string
 }, img: any) => {
 

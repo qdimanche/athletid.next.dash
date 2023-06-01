@@ -5,7 +5,7 @@ import {UserIcon, XCircleIcon} from '@heroicons/react/24/outline'
 import Image from "next/image";
 import Link from "next/link";
 
-export default function DropdownComponent() {
+export default function DropdownComponent(props:any) {
     return (
         <div>
             <Menu as="div" className="relative inline-block text-left">
@@ -14,7 +14,7 @@ export default function DropdownComponent() {
                         className={"w-fit !text-base flex items-center z-[900]"}>
                         <div className={'relative w-[35px] h-[35px] rounded-full overflow-hidden'}>
                             <Image alt={""} sizes={"20vw"} fill className={'object-cover'}
-                                   src={"https://images.unsplash.com/photo-1567598317136-3cd762432241?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"}/>
+                                   src={props.image ? props.image : "/assets/images/avatar.png"}/>
                         </div>
                         <ChevronDownIcon
                             className="ml-2 -mr-1 h-5 w-5 text-timeRed hover:text-timeRed"

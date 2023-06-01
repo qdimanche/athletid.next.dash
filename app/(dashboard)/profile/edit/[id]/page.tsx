@@ -11,21 +11,24 @@ const getData = async (id: any) => {
     return user;
 };
 
-const Page = async ({params}: {params:{id: string}}) => {
+const Page = async ({params}: { params: { id: string } }) => {
 
     const user = await getData(params.id)
 
-    const { createdAt: createdDate, updatedAt: updatedDate, ...rest } = user;
-    const createdAt = createdDate.toISOString();
-    const updatedAt = updatedDate.toISOString();
+    if (user !== null) {
+        const {createdAt: createdDate, updatedAt: updatedDate, ...rest} = user;
+        const createdAt = createdDate.toISOString();
+        const updatedAt = updatedDate.toISOString();
 
-    return (
-        user&&(
+
+        return (
             <div>
                 <EditUserForm user={{...user, createdAt, updatedAt}}/>
             </div>
-        )
-    );
+
+        );
+    }
+
 };
 
 export default Page;
