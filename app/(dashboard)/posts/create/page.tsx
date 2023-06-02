@@ -87,7 +87,7 @@ const Page = () => {
 
     const getAuthors = async () => {
         try {
-            const response = await axios.get("/api/user");
+            const response = await axios.get("/api/users");
             const data = response.data;
             if (data.length > 0) {
                 setAuthors(data);

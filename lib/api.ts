@@ -79,14 +79,14 @@ export const editUser = async (user: {
         const postWithNewImage = {...user, imageUrl}
 
         return fetcher({
-            url: "/api/user/editUser",
+            url: "/api/users/editUser",
             method: "POST",
             body: JSON.parse(JSON.stringify(postWithNewImage)),
         });
     }
 
     return fetcher({
-        url: "/api/user/editUser",
+        url: "/api/users/editUser",
         method: "POST",
         body: JSON.parse(JSON.stringify(user)),
     });
@@ -94,7 +94,7 @@ export const editUser = async (user: {
 };
 
 
-export const createNewPost = async (name: string, categoryId: string | undefined, img: File, status: string, authorId: string) => {
+export const createNewPost = async (name: string, categoryId: string | undefined, img: File, status: string, authorId: string| undefined) => {
 
     const formData = new FormData();
     formData.append("file", img);

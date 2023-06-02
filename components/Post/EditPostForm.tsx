@@ -46,7 +46,7 @@ const EditPostForm: FC<{
 
     const getAuthors = async () => {
         try {
-            return await axios.get("/api/user")
+            return await axios.get("/api/users")
         } catch (e) {
             console.log(e)
         }
