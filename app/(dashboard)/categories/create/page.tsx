@@ -2,11 +2,9 @@
 import React, {useState} from 'react';
 import Input from "@/components/UI/Input";
 import Button from "@/components/UI/Button";
-import {Category, Section} from ".prisma/client";
-import {createNewCategory, createNewPost, createNewSections} from "@/lib/api";
+import {createNewCategory} from "@/lib/api";
 import Card from "@/components/UI/Card";
 import {useRouter} from "next/navigation";
-import TextArea from "@/components/UI/TextArea";
 
 const Page = () => {
 

@@ -94,7 +94,7 @@ export const editUser = async (user: {
 };
 
 
-export const createNewPost = async (name: string, categoryId: string | undefined, img: File, status: string) => {
+export const createNewPost = async (name: string, categoryId: string | undefined, img: File, status: string, authorId: string) => {
 
     const formData = new FormData();
     formData.append("file", img);
@@ -116,6 +116,7 @@ export const createNewPost = async (name: string, categoryId: string | undefined
             img: imageUrl,
             status: status,
             slug: slugify(name),
+            authorId: authorId
         },
     })
 }

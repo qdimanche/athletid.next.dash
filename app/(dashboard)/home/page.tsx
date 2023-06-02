@@ -21,11 +21,6 @@ const getData = async () => {
     return {posts}
 }
 
-async function disconnectHandler (req: any, res : any){
-    res.clearCookie(process.env.JWT_COOKIE);
-    return NextResponse.redirect("/signin");
-}
-
 async function Page() {
 
     const {posts} = await getData()

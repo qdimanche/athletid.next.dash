@@ -4,7 +4,7 @@ import {getCookie} from "cookies-next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const author =   getCookie('author_id', { req, res });
+        const author = getCookie('author_id', {req, res});
 
         const newPost = await db.post.create({
             data: {
@@ -12,8 +12,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 categoryId: req.body.categoryId,
                 img: req.body.img,
                 slug: req.body.slug,
-                status : req.body.status,
-                authorId: JSON.parse(JSON.stringify(author)),
+                status: req.body.status,
+                authorId: req.body.authorId,
             },
         });
 

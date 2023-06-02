@@ -4,10 +4,12 @@ import {ChevronDownIcon} from '@heroicons/react/20/solid'
 import {UserIcon, XCircleIcon} from '@heroicons/react/24/outline'
 import Image from "next/image";
 import Link from "next/link";
-import {useRouter} from "next/navigation";
+
+
 
 export default function DropdownComponent(props:any) {
 
+    const user = props.user;
 
     return (
         <div>
@@ -17,7 +19,7 @@ export default function DropdownComponent(props:any) {
                         className={"w-fit !text-base flex items-center z-[900]"}>
                         <div className={'relative w-[35px] h-[35px] rounded-full overflow-hidden'}>
                             <Image alt={""} sizes={"20vw"} fill className={'object-cover'}
-                                   src={props.user.img ? props.user.img : "/assets/images/avatar.png"}/>
+                                   src={user.img ? user.img : "/assets/images/avatar.png"}/>
                         </div>
                         <ChevronDownIcon
                             className="ml-2 -mr-1 h-5 w-5 text-timeRed hover:text-timeRed"
@@ -43,7 +45,7 @@ export default function DropdownComponent(props:any) {
                                         className={`${
                                             active ? 'bg-timeRed text-white' : 'text-gray-900'
                                         } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                        href={`/profile/edit/${props.user.id}`}
+                                        href={`/profile/edit/${user.id}`}
                                     >
                                         {active ? (
                                             <UserIcon

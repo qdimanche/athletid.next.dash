@@ -1,35 +1,20 @@
 import React, {ReactNode} from "react";
 import '@/styles/global.css';
 import Navbar from "@/components/Navbar/Navbar";
+import DropdownComponent from "@/components/UI/DropdownComponent";
+import {delay} from "@/lib/async";
+import {getUserFromCookie} from "@/lib/auth";
 import {cookies} from "next/headers";
-import {User} from "@prisma/client";
-import {db} from "@/lib/db";
 
-
-const getUser = async () => {
-
-    try {
-        const nextCookies = cookies();
-        const userId = nextCookies.get('authorId')?.value
-
-        const user: User | null = await db.user.findFirst({
-            where: {
-                id: userId,
-            },
-        });
-
-        return user
-    } catch (e) {
-        console.log(e)
-    }
-
-};
+const getData = async () => {
+    await delay(4000)
+    return await getUserFromCookie(cookies())
+}
 
 async function DashboardRootLayout({children}: { children: ReactNode }) {
 
-    const user = await getUser();
 
-    console.log(user)
+    const user= await getData();
 
     return (
         <html lang={"en"}>

@@ -12,7 +12,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 categoryId: req.body.categoryId,
                 img: req.body.imageUrl ? req.body.imageUrl : req.body.img ,
                 slug: slugify(req.body.name),
-                status: req.body.status
+                status: req.body.status,
+                authorId:  req.body.authorId
             },
         });
 

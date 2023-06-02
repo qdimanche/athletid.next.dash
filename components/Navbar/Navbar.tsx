@@ -8,6 +8,7 @@ import Burger from "./Burger";
 import {logout} from "@/lib/api";
 import DropdownComponent from "@/components/UI/DropdownComponent";
 import {useRouter} from "next/navigation";
+import ImageDropdown from "@/components/Navbar/Dropdown/ImageDropdown";
 
 
 
@@ -53,7 +54,7 @@ const Navbar = (props: any) => {
     }, [])
 
     return (
-        <div
+        <nav
             className={`fixed z-[1] w-screen lg:py-6 py-4  top-0 transform translate-x-1/2 -left-1/2 ${
                 isScrolled ? 'bg-white' : ''
             } duration-500`}
@@ -126,7 +127,7 @@ const Navbar = (props: any) => {
                     }}/>
                 </div>
             </div>
-        </div>
+        </nav>
     )
 }
 

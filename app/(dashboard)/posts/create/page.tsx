@@ -9,6 +9,7 @@ import {useRouter} from "next/navigation";
 import TextArea from "@/components/UI/TextArea";
 import axios from "axios";
 import Loading from "@/app/(dashboard)/posts/loading";
+import {User} from "@prisma/client";
 
 const Page = () => {
 
@@ -18,9 +19,11 @@ const Page = () => {
     const [img, setImg] = useState<File>();
     const [isLoad, setIsLoad] = useState(false);
     const [categoryId, setCategoryId] = useState<string>();
+    const [authorId, setAuthorId] = useState<string>();
     const [imgUrl, setImgUrl] = useState<string | undefined>();
     const [sections, setSections] = useState<Section[]>([{id: "", postId: "", subTitle: "", paragraph: "", order: 1}]);
     const [categories, setCategories] = useState<Category[]>([]);
+    const [authors, setAuthors] = useState<User[]>([]);
 
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +38,7 @@ const Page = () => {
 
         if (img) {
             try {
-                const newPost = await createNewPost(name, categoryId, img, status);
+                const newPost = await createNewPost(name, categoryId, img, status, authorId);
                 const filteredSections = sections.filter((obj) => {
                     return obj.subTitle.trim() !== "";
                 });
@@ -82,15 +85,29 @@ const Page = () => {
         }
     }
 
+    const getAuthors = async () => {
+        try {
+            const response = await axios.get("/api/user");
+            const data = response.data;
+            if (data.length > 0) {
+                setAuthors(data);
+                setAuthorId(data[0].id);
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
     useEffect(() => {
         getCategories();
+        getAuthors();
     }, [])
 
     useEffect(() => {
-        if (categories) {
+        if (categories && authors) {
             setIsLoad(true)
         }
-    }, [categories]);
+    }, [categories, authors]);
 
     return (
         <div
@@ -116,6 +133,21 @@ const Page = () => {
                                     {categories.map((category) => {
                                         return (
                                             <option key={category.id} value={category.id}>{category.name}
+                                            </option>
+                                        )
+                                    })}
+                                </select> :
+                                <></>
+                        }                        {
+                            isLoad ?
+                                <select
+                                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setAuthorId(e.target.value)}
+                                    value={authorId}
+                                    className={"p-4 text-lg rounded-small w-full !border-0"}
+                                >
+                                    {authors.map((author) => {
+                                        return (
+                                            <option key={author.id} value={author.id}>{author.firstName + " "+  author.lastName}
                                             </option>
                                         )
                                     })}

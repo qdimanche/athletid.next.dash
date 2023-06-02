@@ -10,6 +10,7 @@ import Image from 'next/image'
 import TextArea from "@/components/UI/TextArea";
 import axios from "axios";
 import Loading from "@/app/(dashboard)/posts/loading";
+import {User} from "@prisma/client";
 
 const EditPostForm: FC<{
     post: Omit<Post, "createdAt" | "updatedAt"> & {
@@ -21,6 +22,7 @@ const EditPostForm: FC<{
 
     const [sections, setSections] = useState<Section[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
+    const [authors, setAuhtors] = useState<User[]>([]);
     const [isLoad, setIsLoad] = useState(false);
     const [formState, setFormState] = useState({...post})
     const [img, setImg] = useState<File>();
@@ -42,6 +44,14 @@ const EditPostForm: FC<{
         }
     }
 
+    const getAuthors = async () => {
+        try {
+            return await axios.get("/api/user")
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
 
     useEffect(() => {
         getSections().then((sections) => {
@@ -51,6 +61,10 @@ const EditPostForm: FC<{
 
     useEffect(() => {
         getCategories().then((response) => setCategories(response?.data))
+    }, [])
+
+    useEffect(() => {
+        getAuthors().then((response) => setAuhtors(response?.data))
     }, [])
 
     useEffect(() => {
@@ -122,6 +136,21 @@ const EditPostForm: FC<{
                             {categories.map((category) => {
                                 return (
                                     <option key={category.id} value={category.id}>{category.name}
+                                    </option>
+                                )
+                            })}
+                        </select>
+                        <select
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormState((prevState) => ({
+                                ...prevState,
+                                authorId: e.target.value
+                            }))}
+                            value={formState.authorId}
+                            className={"p-4 text-lg rounded-small w-full !border-0"}
+                        >
+                            {authors.map((author) => {
+                                return (
+                                    <option key={author.id} value={author.id}>{author.firstName + " " + author.lastName}
                                     </option>
                                 )
                             })}
