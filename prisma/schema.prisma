@@ -56,3 +56,8 @@ model Category {
   id   String @id @default(uuid()) @map("undefined_category_id")
   Post Post[]
 }
+
+model SearchQuery {
+  id    String @id @default(uuid())
+  query String
+}
