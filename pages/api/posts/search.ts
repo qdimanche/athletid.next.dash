@@ -11,6 +11,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 throw new Error("Invalid request");
             }
 
+
             const posts = await db.post.findMany({
                 where: {
                     name: {
