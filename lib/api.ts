@@ -1,6 +1,7 @@
 import slugify from "slugify";
 import axios from "axios";
 import {Section} from ".prisma/client";
+import {SectionsWithImgFile} from "@/types/SectionsProps";
 
 
 const fetcher = async ({url, method, body, json = true}: {
@@ -194,10 +195,25 @@ export const editCategory = async (category: {
     });
 };
 
-export const createNewSections = async (postId: string, sections: Section[]) => {
+export const createNewSections = async (postId: string, sections: SectionsWithImgFile[]) => {
 
     try {
-        return Promise.all(sections.map(section => {
+        return Promise.all(sections.map(async section => {
+
+            const img = section.imgFile;
+
+            const config = {
+                headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+            };
+
+            const formData = new FormData();
+            formData.append("file", img ? img : "");
+            formData.append("upload_preset", "ml_default");
+
+            const res = await axios.post("https://api.cloudinary.com/v1_1/ddjdkkktr/image/upload", formData, config)
+            let imageUrl = res.data.secure_url
+
+
             return fetcher({
                 url: "/api/sections/createSection",
                 method: "POST",
@@ -205,7 +221,8 @@ export const createNewSections = async (postId: string, sections: Section[]) => 
                     postId: postId,
                     subTitle: section.subTitle,
                     paragraph: section.paragraph,
-                    order: section.order
+                    order: section.order,
+                    img: imageUrl
                 },
             });
         }))

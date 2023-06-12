@@ -10,6 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 data: {
                     subTitle: req.body.subTitle,
                     paragraph: req.body.paragraph,
+                    img: req.body.img,
                     order: req.body.order,
                     post: {
                         connect: {

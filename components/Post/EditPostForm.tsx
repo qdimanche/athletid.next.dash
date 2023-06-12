@@ -30,7 +30,7 @@ const EditPostForm: FC<{
     const getSections = async () => {
         try {
             const sections = await listSections(post.id);
-            return sections.sort((a:any, b:any) => a.order - b.order);
+            return sections?.sort((a:any, b:any) => a.order - b.order);
         } catch (e) {
             console.log(e)
         }
@@ -106,7 +106,7 @@ const EditPostForm: FC<{
         {...formState}
     ])
 
-    sections.sort((a, b) => a.order - b.order);
+    sections?.sort((a, b) => a.order - b.order);
 
     return (
         <Card>
@@ -133,7 +133,7 @@ const EditPostForm: FC<{
                             value={formState.categoryId}
                             className={"p-4 text-lg rounded-small w-full !border-0"}
                         >
-                            {categories.map((category) => {
+                            {categories?.map((category) => {
                                 return (
                                     <option key={category.id} value={category.id}>{category.name}
                                     </option>
@@ -175,7 +175,7 @@ const EditPostForm: FC<{
 
                         <div className={'text-xl !mt-12'}>Sections</div>
 
-                        {sections.map((section) => {
+                        {sections?.map((section) => {
                             return (
                                 <div key={section.id}>
                                     <Input

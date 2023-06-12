@@ -41,12 +41,13 @@ model Post {
 }
 
 model Section {
-  id        String @id @default(uuid())
+  id        String  @id @default(uuid())
   subTitle  String
-  paragraph String @db.VarChar(10000)
+  img       String?
+  paragraph String  @db.VarChar(10000)
   postId    String
-  order     Int    @default(0)
-  post      Post   @relation(fields: [postId], references: [id])
+  order     Int     @default(0)
+  post      Post    @relation(fields: [postId], references: [id])
 
   @@index([postId, id])
 }

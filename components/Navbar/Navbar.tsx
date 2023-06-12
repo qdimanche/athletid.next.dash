@@ -8,9 +8,6 @@ import Burger from "./Burger";
 import {logout} from "@/lib/api";
 import DropdownComponent from "@/components/UI/DropdownComponent";
 import {useRouter} from "next/navigation";
-import ImageDropdown from "@/components/Navbar/Dropdown/ImageDropdown";
-
-
 
 const Navbar = (props: any) => {
 

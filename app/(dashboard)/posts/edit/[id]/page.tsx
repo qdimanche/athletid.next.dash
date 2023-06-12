@@ -16,8 +16,6 @@ export default async function ProjectPage({params}: { params: { id: string } }) 
 
 
     const post = await getData(params.id)
-
-    console.log(post)
     if (!post) {
         return <div>Post not found</div>;
     }

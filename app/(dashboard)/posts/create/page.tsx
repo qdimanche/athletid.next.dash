@@ -10,6 +10,11 @@ import TextArea from "@/components/UI/TextArea";
 import axios from "axios";
 import Loading from "@/app/(dashboard)/posts/loading";
 import {User} from "@prisma/client";
+import {SectionsWithImgFile} from "@/types/SectionsProps";
+
+
+
+
 
 const Page = () => {
 
@@ -21,10 +26,17 @@ const Page = () => {
     const [categoryId, setCategoryId] = useState<string>();
     const [authorId, setAuthorId] = useState<string>();
     const [imgUrl, setImgUrl] = useState<string | undefined>();
-    const [sections, setSections] = useState<Section[]>([{id: "", postId: "", subTitle: "", paragraph: "", order: 1}]);
+    const [sections, setSections] = useState<SectionsWithImgFile[]>([{
+        id: "",
+        subTitle: "",
+        paragraph: "",
+        order: 1,
+        imgFile: null
+    }]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [authors, setAuthors] = useState<User[]>([]);
 
+    console.log(sections)
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
@@ -32,6 +44,7 @@ const Page = () => {
             setImg(files[0]);
         }
     };
+
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -60,12 +73,12 @@ const Page = () => {
         const newOrder = lastSection ? lastSection.order + 1 : 1;
 
         if (!lastSection || (lastSection.subTitle.trim() !== "" && lastSection.paragraph.trim() !== "")) {
-            const newSection: Section = {
+            const newSection: SectionsWithImgFile = {
                 id: "",
-                postId: "",
                 subTitle: "",
                 paragraph: "",
-                order: newOrder
+                order: newOrder,
+                imgFile : null
             };
 
             setSections(prevSections => [...prevSections, newSection]);
@@ -138,22 +151,23 @@ const Page = () => {
                                     })}
                                 </select> :
                                 <></>
-                        }                        {
-                            isLoad ?
-                                <select
-                                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setAuthorId(e.target.value)}
-                                    value={authorId}
-                                    className={"p-4 text-lg rounded-small w-full !border-0"}
-                                >
-                                    {authors.map((author) => {
-                                        return (
-                                            <option key={author.id} value={author.id}>{author.firstName + " "+  author.lastName}
-                                            </option>
-                                        )
-                                    })}
-                                </select> :
-                                <></>
-                        }
+                        } {
+                        isLoad ?
+                            <select
+                                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setAuthorId(e.target.value)}
+                                value={authorId}
+                                className={"p-4 text-lg rounded-small w-full !border-0"}
+                            >
+                                {authors.map((author) => {
+                                    return (
+                                        <option key={author.id}
+                                                value={author.id}>{author.firstName + " " + author.lastName}
+                                        </option>
+                                    )
+                                })}
+                            </select> :
+                            <></>
+                    }
 
 
                         <select
@@ -193,6 +207,22 @@ const Page = () => {
                                             setSections(newSections);
                                         }}
                                     />
+                                    <Input
+                                        type="file"
+                                        value=""
+                                        className="mb-6"
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                            const newSections = [...sections];
+                                            const files = e.target.files;
+                                            if (files && files.length > 0) {
+                                                newSections[index].imgFile = files[0];
+                                            } else {
+                                                newSections[index].imgFile = null;
+                                            }
+                                            setSections(newSections);
+                                        }}
+                                    />
+
                                 </div>)
                         })}
 
