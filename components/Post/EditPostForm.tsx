@@ -1,6 +1,6 @@
 'use client'
 import React, {FC, useCallback, useEffect, useState} from 'react';
-import {Category, Post, Section} from ".prisma/client";
+import {Category, Post} from ".prisma/client";
 import {useRouter} from "next/navigation";
 import {editPost, editSection, listSections} from "@/lib/api";
 import Card from "@/components/UI/Card";
@@ -11,6 +11,7 @@ import TextArea from "@/components/UI/TextArea";
 import axios from "axios";
 import Loading from "@/app/(dashboard)/posts/loading";
 import {User} from "@prisma/client";
+import {SectionsWithImgFile} from "@/types/SectionsProps";
 
 const EditPostForm: FC<{
     post: Omit<Post, "createdAt" | "updatedAt"> & {
@@ -20,21 +21,22 @@ const EditPostForm: FC<{
 }> = ({post}) => {
 
 
-    const [sections, setSections] = useState<Section[]>([]);
+    const [sections, setSections] = useState<SectionsWithImgFile[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [authors, setAuhtors] = useState<User[]>([]);
     const [isLoad, setIsLoad] = useState(false);
     const [formState, setFormState] = useState({...post})
     const [img, setImg] = useState<File>();
 
-    const getSections = async () => {
+
+    const getSections = useCallback(async () => {
         try {
             const sections = await listSections(post.id);
-            return sections?.sort((a:any, b:any) => a.order - b.order);
+            return sections?.sort((a: any, b: any) => a.order - b.order);
         } catch (e) {
             console.log(e)
         }
-    }
+    }, [post.id]);
 
     const getCategories = async () => {
         try {
@@ -57,7 +59,7 @@ const EditPostForm: FC<{
         getSections().then((sections) => {
             setSections(sections)
         })
-    }, [])
+    }, [getSections])
 
     useEffect(() => {
         getCategories().then((response) => setCategories(response?.data))
@@ -105,6 +107,8 @@ const EditPostForm: FC<{
     }, [
         {...formState}
     ])
+
+    console.log(sections)
 
     sections?.sort((a, b) => a.order - b.order);
 
@@ -175,42 +179,66 @@ const EditPostForm: FC<{
 
                         <div className={'text-xl !mt-12'}>Sections</div>
 
-                        {sections?.map((section) => {
+                        {sections?.map((value, index) => {
                             return (
-                                <div key={section.id}>
+                                <div key={value.id}>
                                     <Input
                                         placeholder="Subtitle"
-                                        value={section.subTitle || ""}
+                                        value={value.subTitle || ""}
                                         className={'mb-6'}
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                            const index = sections.findIndex(s => s.id === section.id);
+                                            const index = sections.findIndex((s) => s.id === value.id);
                                             const newSections = [...sections];
                                             newSections[index] = {
                                                 ...newSections[index],
-                                                subTitle: e.target.value
+                                                subTitle: e.target.value,
                                             };
                                             setSections(newSections);
                                         }}
                                     />
                                     <TextArea
                                         placeholder="Paragraph"
-                                        value={section.paragraph || ""}
+                                        value={value.paragraph || ""}
                                         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                                            const index = sections.findIndex(s => s.id === section.id);
+                                            const index = sections.findIndex((s) => s.id === value.id);
                                             const newSections = [...sections];
                                             newSections[index] = {
                                                 ...newSections[index],
-                                                paragraph: e.target.value
+                                                paragraph: e.target.value,
                                             };
                                             setSections(newSections);
                                         }}
                                     />
-
-                                </div>)
+                                    {value.img && (
+                                        <div className={"my-6 h-[200px] w-[400px] relative"}>
+                                            <Image alt={""} sizes={"60vw"} fill src={value.img} className={"object-cover"}/>
+                                        </div>
+                                    )}
+                                    <input
+                                        type="file"
+                                        className="mb-6"
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                            const files = e.target.files;
+                                            if (files && files.length > 0) {
+                                                const index = sections.findIndex((s) => s.id === value.id);
+                                                const newSections = [...sections];
+                                                newSections[index] = {
+                                                    ...newSections[index],
+                                                    img: value.img,
+                                                    imgFile: files[0],
+                                                };
+                                                setSections(newSections);
+                                            }
+                                        }}
+                                    />
+                                </div>
+                            );
                         })}
 
-                        <Image alt={""} sizes={"60vw"} width={400} height={400}
-                               src={formState.img ?? '/placeholder.png'}/>
+                        <div className={"my-6 h-[200px] w-[400px] relative"}>
+                            <Image alt={""} sizes={"60vw"} fill className={'object-cover'}
+                                   src={formState.img ?? '/placeholder.png'}/>
+                        </div>
                         <Input className={'!p-1'} type={"file"} value={undefined}
                                onChange={handleFileChange}
                         />

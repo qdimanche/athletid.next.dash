@@ -13,9 +13,6 @@ import {User} from "@prisma/client";
 import {SectionsWithImgFile} from "@/types/SectionsProps";
 
 
-
-
-
 const Page = () => {
 
     const router = useRouter()
@@ -26,6 +23,7 @@ const Page = () => {
     const [categoryId, setCategoryId] = useState<string>();
     const [authorId, setAuthorId] = useState<string>();
     const [imgUrl, setImgUrl] = useState<string | undefined>();
+    const [sectionImgUrl, setSectionImgUrl] = useState<string | undefined>()
     const [sections, setSections] = useState<SectionsWithImgFile[]>([{
         id: "",
         subTitle: "",
@@ -209,7 +207,7 @@ const Page = () => {
                                     />
                                     <Input
                                         type="file"
-                                        value=""
+                                        value={sectionImgUrl}
                                         className="mb-6"
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                             const newSections = [...sections];

@@ -242,14 +242,27 @@ export const listSections = (postId: string) => {
 };
 
 
-export const editSection = (section: Object) => {
+export const editSection = async (section: SectionsWithImgFile) => {
+    const img = section.imgFile;
 
-    return fetcher({
-        url: "/api/sections/editSection",
-        method: "POST",
-        body: section,
-    });
+    if (img) {
+        const config = {
+            headers: {'Content-Type': 'multipart/form-data'},
+        };
+
+        const formData = new FormData();
+        formData.append("file", img);
+        formData.append("upload_preset", "ml_default");
+
+        const res = await axios.post("https://api.cloudinary.com/v1_1/ddjdkkktr/image/upload", formData, config);
+        const imageUrl = res.data.secure_url;
+
+        return axios.post("/api/sections/editSection", {...section, imageUrl});
+    } else {
+        return axios.post("/api/sections/editSection", section);
+    }
 };
+
 
 
 export const deletePost = (postId: string) => {
