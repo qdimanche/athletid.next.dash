@@ -1,6 +1,6 @@
 import {db} from "@/lib/db";
 import {Category, Post} from ".prisma/client";
-import EditCategoryForm from "@/components/Category/EditCategoryForm";
+import EditCategoryForm from "@/components/Post/Category/EditCategoryForm";
 
 const getData = async (id: any) => {
     const category: Category | null = await db.category.findFirst({

@@ -116,7 +116,34 @@ export const createNewPost = async (name: string, categoryId: string | undefined
             categoryId: categoryId,
             img: imageUrl,
             status: status,
-            slug: slugify(name),
+            slug: slugify(name.substring(0, name.length - 1)),
+            authorId: authorId
+        },
+    })
+}
+
+export const createNewWorkout = async (name: string, workoutCategoryId: string | undefined, img: File, status: string, authorId: string| undefined) => {
+
+    const formData = new FormData();
+    formData.append("file", img);
+    formData.append("upload_preset", "ml_default");
+
+    const config = {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+    };
+
+    const res = await axios.post("https://api.cloudinary.com/v1_1/ddjdkkktr/image/upload", formData, config);
+    const imageUrl = res.data.secure_url;
+
+    return await fetcher({
+        url: "/api/workouts/createWorkout",
+        method: "POST",
+        body: {
+            name: name,
+            workoutCategoryId: workoutCategoryId,
+            img: imageUrl,
+            status: status,
+            slug: slugify(name.substring(0, name.length - 1)),
             authorId: authorId
         },
     })
@@ -163,6 +190,48 @@ export const editPost = async (post: {
 
 };
 
+export const editWorkout = async (workout: {
+    createdAt: string;
+    img: string | null;
+    name: string;
+    id: string;
+    authorId: string;
+    slug: string;
+    workoutCategoryId: string;
+    status: string;
+    updatedAt: string
+    difficulty: string
+}, img: any) => {
+
+    const config = {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+    };
+
+    const formData = new FormData();
+    formData.append("file", img);
+    formData.append("upload_preset", "ml_default");
+
+    if (img) {
+        const res = await axios.post("https://api.cloudinary.com/v1_1/ddjdkkktr/image/upload", formData, config)
+        let imageUrl = res.data.secure_url
+
+        const workoutWithNewImage = {...workout, imageUrl}
+
+        return fetcher({
+            url: "/api/workouts/editWorkout",
+            method: "POST",
+            body: JSON.parse(JSON.stringify(workoutWithNewImage)),
+        });
+    }
+
+    return fetcher({
+        url: "/api/workouts/editWorkout",
+        method: "POST",
+        body: JSON.parse(JSON.stringify(workout)),
+    });
+
+};
+
 export const createNewCategory = async (name: string) => {
 
     return await fetcher({
@@ -174,14 +243,18 @@ export const createNewCategory = async (name: string) => {
     })
 }
 
-export const deleteCategory = (categoryId: string) => {
+export const createNewWorkoutCategory = async (name: string) => {
 
-    return fetcher({
-        url: "/api/categories/deleteCategory",
+    return await fetcher({
+        url: "/api/workoutCategories/createWorkoutCategory",
         method: "POST",
-        body: {categoryId},
-    });
-};
+        body: {
+            name: name,
+        },
+    })
+}
+
+
 
 
 export const editCategory = async (category: {
@@ -192,6 +265,35 @@ export const editCategory = async (category: {
         url: "/api/categories/editCategory",
         method: "POST",
         body: JSON.parse(JSON.stringify(category)),
+    });
+};
+
+export const editWorkoutCategory = async (workoutCategory: {
+    name: string;
+}) => {
+
+    return fetcher({
+        url: "/api/workoutCategories/editWorkoutCategory",
+        method: "POST",
+        body: JSON.parse(JSON.stringify(workoutCategory)),
+    });
+};
+
+export const deleteCategory = (categoryId: string) => {
+
+    return fetcher({
+        url: "/api/categories/deleteCategory",
+        method: "POST",
+        body: {categoryId},
+    });
+};
+
+export const deleteWorkoutCategory = (workoutCategoryId: string) => {
+
+    return fetcher({
+        url: "/api/workoutCategories/deleteWorkoutCategory",
+        method: "POST",
+        body: {workoutCategoryId},
     });
 };
 
@@ -232,12 +334,58 @@ export const createNewSections = async (postId: string, sections: SectionsWithIm
     }
 }
 
+export const createNewWorkoutSections = async (workoutId: string, sections: SectionsWithImgFile[]) => {
+
+    try {
+        return Promise.all(sections.map(async section => {
+
+            const img = section.imgFile;
+
+            const config = {
+                headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+            };
+
+            const formData = new FormData();
+            formData.append("file", img ? img : "");
+            formData.append("upload_preset", "ml_default");
+
+            const res = await axios.post("https://api.cloudinary.com/v1_1/ddjdkkktr/image/upload", formData, config)
+            let imageUrl = res.data.secure_url
+
+
+            return fetcher({
+                url: "/api/workoutSections/createWorkoutSection",
+                method: "POST",
+                body: {
+                    workoutId: workoutId,
+                    subTitle: section.subTitle,
+                    paragraph: section.paragraph,
+                    order: section.order,
+                    img: imageUrl
+                },
+            });
+        }))
+
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 export const listSections = (postId: string) => {
 
     return fetcher({
         url: "/api/sections/[postId]",
         method: "POST",
         body: {postId},
+    });
+};
+
+export const listWorkoutSections = (workoutId: string) => {
+
+    return fetcher({
+        url: "/api/workoutSections/[workoutId]",
+        method: "POST",
+        body: {workoutId},
     });
 };
 
@@ -263,6 +411,27 @@ export const editSection = async (section: SectionsWithImgFile) => {
     }
 };
 
+export const editWorkoutSection = async (section: SectionsWithImgFile) => {
+    const img = section.imgFile;
+
+    if (img) {
+        const config = {
+            headers: {'Content-Type': 'multipart/form-data'},
+        };
+
+        const formData = new FormData();
+        formData.append("file", img);
+        formData.append("upload_preset", "ml_default");
+
+        const res = await axios.post("https://api.cloudinary.com/v1_1/ddjdkkktr/image/upload", formData, config);
+        const imageUrl = res.data.secure_url;
+
+        return axios.post("/api/workoutSections/editSection", {...section, imageUrl});
+    } else {
+        return axios.post("/api/workoutSections/editSection", section);
+    }
+};
+
 
 
 export const deletePost = (postId: string) => {
@@ -271,6 +440,15 @@ export const deletePost = (postId: string) => {
         url: "/api/posts/deletePost",
         method: "POST",
         body: {postId},
+    });
+};
+
+export const deleteWorkout = (workoutId: string) => {
+
+    return fetcher({
+        url: "/api/workouts/deleteWorkout",
+        method: "POST",
+        body: {workoutId},
     });
 };
 

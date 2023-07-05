@@ -1,5 +1,5 @@
 'use client'
-import Card from "../UI/Card";
+import Card from "../../UI/Card";
 import {FC} from "react";
 import {Category} from ".prisma/client";
 import Button from "@/components/UI/Button";
