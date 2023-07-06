@@ -174,7 +174,7 @@ export const editPost = async (post: {
     categoryId: string;
     status: string;
     updatedAt: string
-}, img: any, qrCodeImg: File) => {
+}, img: any) => {
 
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
@@ -184,18 +184,11 @@ export const editPost = async (post: {
     formData.append("file", img);
     formData.append("upload_preset", "ml_default");
 
-    const QRCodeFormData = new FormData();
-    QRCodeFormData.append("file", qrCodeImg);
-    QRCodeFormData.append("upload_preset", "ml_default");
-
-    const qrCodeRes = await axios.post("https://api.cloudinary.com/v1_1/ddjdkkktr/image/upload", QRCodeFormData, config);
-    const QrCodeImageUrl = qrCodeRes.data.secure_url;
-
     if (img) {
         const res = await axios.post("https://api.cloudinary.com/v1_1/ddjdkkktr/image/upload", formData, config)
         let imageUrl = res.data.secure_url
 
-        const postWithNewImage = {...post, imageUrl, QrCodeImageUrl}
+        const postWithNewImage = {...post, imageUrl}
 
         return fetcher({
             url: "/api/posts/editPost",

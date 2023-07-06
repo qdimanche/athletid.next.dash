@@ -5,7 +5,6 @@ export default async function signin(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-
     const workouts = await db.workout.findMany();
 
     if (workouts) {
