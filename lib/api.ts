@@ -225,7 +225,7 @@ export const editWorkout = async (
         updatedAt: string;
         difficulty: string;
         duration: number | undefined;
-        qrCodeImg: string | null; // Ajouter la propriété qrCodeImg
+        qrCodeImg: string | null;
     },
     img: File | undefined,
     qrCodeImg: File | undefined
