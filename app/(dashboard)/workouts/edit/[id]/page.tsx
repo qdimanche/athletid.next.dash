@@ -19,7 +19,7 @@ export default async function ProjectPage({params}: { params: { id: string } }) 
 
     const post = await getData(params.id)
     if (!post) {
-        return <div>Workout not found</div>;
+        return <div>Workout not found.</div>;
     }
     const { createdAt: createdDate, updatedAt: updatedDate, ...rest } = post;
     const createdAt = createdDate.toISOString();
