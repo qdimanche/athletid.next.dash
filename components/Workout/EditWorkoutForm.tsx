@@ -26,6 +26,7 @@ const EditWorkoutForm: FC<{
     const [isLoad, setIsLoad] = useState(false);
     const [formState, setFormState] = useState({...workout})
     const [img, setImg] = useState<File>();
+    const [qrCodeImg, setQrCodeImg]=  useState<File>();
 
     const getSections = useCallback(async () => {
         try {
@@ -77,6 +78,7 @@ const EditWorkoutForm: FC<{
         }
     }, [categories, sections])
 
+    console.log(qrCodeImg)
 
     const router = useRouter();
 
@@ -87,26 +89,43 @@ const EditWorkoutForm: FC<{
         }
     };
 
+    const handleQrCodeFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (files && files.length > 0) {
+            setQrCodeImg(files[0]);
+        }
+    };
+
 
     const handleSubmit = useCallback(async (e: any) => {
-        e.preventDefault()
+        e.preventDefault();
 
         try {
-            await editWorkout(formState, img)
+            await editWorkout(formState, img, qrCodeImg);
+
             for (const section of sections) {
                 await editWorkoutSection(section);
             }
-            router.replace("/workouts")
-        } catch (e) {
-            console.log(e)
+
+            router.replace("/workouts");
+        } catch (error) {
+            console.log(error);
         } finally {
-            setFormState({...formState})
+            setFormState({ ...formState });
         }
-    }, [
-        {...formState}
-    ])
+    }, [formState, img, qrCodeImg, sections]);
 
     sections?.sort((a, b) => a.order - b.order);
+
+    const handleDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const duration = parseFloat(e.target.value);
+        setFormState((prevState) => ({
+            ...prevState,
+            duration: !isNaN(duration) ? duration : 0,
+        }));
+    };
+
+
 
     return (
         <Card>
@@ -124,6 +143,13 @@ const EditWorkoutForm: FC<{
                                     name: e.target.value,
                                 }))
                             }
+                        />
+                        <Input
+                            placeholder="Duration"
+                            className={'bg-white'}
+                            type={"number"}
+                            value={formState.duration !== undefined ? formState.duration.toString() : ''}
+                            onChange={handleDurationChange}
                         />
                         <select
                             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormState((prevState) => ({
@@ -170,6 +196,21 @@ const EditWorkoutForm: FC<{
                             <option value={"DRAFT"}>DRAFT
                             </option>
                             <option value="PUBLISHED">PUBLISHED
+                            </option>
+                        </select>
+                        <select
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                                setFormState((prevState) => ({
+                                    ...prevState,
+                                    difficulty: e.target.value,
+                                }))
+                            }
+                            value={formState.difficulty}
+                            className={"p-4 text-lg rounded-small w-full !border-0"}
+                        >
+                            <option value={"medium"}>Medium
+                            </option>
+                            <option value="hard">Hard
                             </option>
                         </select>
 
@@ -232,12 +273,24 @@ const EditWorkoutForm: FC<{
                             );
                         })}
 
+                        <div className={'text-xl'}>Workout Image</div>
+
                         <div className={"my-6 h-[200px] w-[400px] relative"}>
                             <Image alt={""} sizes={"60vw"} fill className={'object-cover'}
                                    src={formState.img ?? '/placeholder.png'}/>
                         </div>
                         <Input className={'!p-1'} type={"file"} value={undefined}
                                onChange={handleFileChange}
+                        />
+
+                        <div className={'text-xl'}>Qr Code Image</div>
+
+                        <div className={"my-6 h-[200px] w-[400px] relative"}>
+                            <Image alt={""} sizes={"60vw"} fill className={'object-cover'}
+                                   src={formState.qrCodeImg ?? '/placeholder.png'}/>
+                        </div>
+                        <Input className={'!p-1'} type={"file"} value={undefined}
+                               onChange={handleQrCodeFileChange}
                         />
                         <Button type="submit">Update</Button>
                     </form>

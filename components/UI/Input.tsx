@@ -4,7 +4,7 @@ import {FC} from "react";
 export interface InputProps
     extends React.HTMLAttributes<HTMLInputElement>{
     required?: boolean;
-    value?: string;
+    value?: string | number;
     type?: string
 }
 

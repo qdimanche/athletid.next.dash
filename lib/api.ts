@@ -1,6 +1,5 @@
 import slugify from "slugify";
 import axios from "axios";
-import {Section} from ".prisma/client";
 import {SectionsWithImgFile} from "@/types/SectionsProps";
 
 
@@ -10,6 +9,7 @@ const fetcher = async ({url, method, body, json = true}: {
     body: object,
     json?: boolean
 }) => {
+
     const res = await fetch(url, {
         method,
         body: JSON.stringify(body),
@@ -95,7 +95,7 @@ export const editUser = async (user: {
 };
 
 
-export const createNewPost = async (name: string, categoryId: string | undefined, img: File, status: string, authorId: string| undefined) => {
+export const createNewPost = async (name: string, categoryId: string | undefined, img: File, status: string, authorId: string | undefined) => {
 
     const formData = new FormData();
     formData.append("file", img);
@@ -122,11 +122,12 @@ export const createNewPost = async (name: string, categoryId: string | undefined
     })
 }
 
-export const createNewWorkout = async (name: string, workoutCategoryId: string | undefined, img: File, status: string, authorId: string| undefined) => {
+export const createNewWorkout = async (name: string, workoutCategoryId: string | undefined, img: File, qrCodeImg: File | undefined, status: string, authorId: string | undefined, difficulty: string | undefined, duration: number | undefined) => {
 
     const formData = new FormData();
     formData.append("file", img);
     formData.append("upload_preset", "ml_default");
+
 
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
@@ -135,14 +136,28 @@ export const createNewWorkout = async (name: string, workoutCategoryId: string |
     const res = await axios.post("https://api.cloudinary.com/v1_1/ddjdkkktr/image/upload", formData, config);
     const imageUrl = res.data.secure_url;
 
+
+    const QRCodeFormData = new FormData();
+    if (qrCodeImg) {
+        QRCodeFormData.append("file", qrCodeImg);
+        QRCodeFormData.append("upload_preset", "ml_default");
+    }
+
+    const qrCodeRes = await axios.post("https://api.cloudinary.com/v1_1/ddjdkkktr/image/upload", QRCodeFormData, config);
+    const QrCodeImageUrl = qrCodeRes.data.secure_url;
+
+
     return await fetcher({
         url: "/api/workouts/createWorkout",
         method: "POST",
         body: {
             name: name,
+            duration: duration,
             workoutCategoryId: workoutCategoryId,
             img: imageUrl,
+            qrCodeImg: QrCodeImageUrl,
             status: status,
+            difficulty: difficulty,
             slug: slugify(name.substring(0, name.length - 1)),
             authorId: authorId
         },
@@ -159,7 +174,7 @@ export const editPost = async (post: {
     categoryId: string;
     status: string;
     updatedAt: string
-}, img: any) => {
+}, img: any, qrCodeImg: File) => {
 
     const config = {
         headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
@@ -169,11 +184,18 @@ export const editPost = async (post: {
     formData.append("file", img);
     formData.append("upload_preset", "ml_default");
 
+    const QRCodeFormData = new FormData();
+    QRCodeFormData.append("file", qrCodeImg);
+    QRCodeFormData.append("upload_preset", "ml_default");
+
+    const qrCodeRes = await axios.post("https://api.cloudinary.com/v1_1/ddjdkkktr/image/upload", QRCodeFormData, config);
+    const QrCodeImageUrl = qrCodeRes.data.secure_url;
+
     if (img) {
         const res = await axios.post("https://api.cloudinary.com/v1_1/ddjdkkktr/image/upload", formData, config)
         let imageUrl = res.data.secure_url
 
-        const postWithNewImage = {...post, imageUrl}
+        const postWithNewImage = {...post, imageUrl, QrCodeImageUrl}
 
         return fetcher({
             url: "/api/posts/editPost",
@@ -190,47 +212,72 @@ export const editPost = async (post: {
 
 };
 
-export const editWorkout = async (workout: {
-    createdAt: string;
-    img: string | null;
-    name: string;
-    id: string;
-    authorId: string;
-    slug: string;
-    workoutCategoryId: string;
-    status: string;
-    updatedAt: string
-    difficulty: string
-}, img: any) => {
-
+export const editWorkout = async (
+    workout: {
+        createdAt: string;
+        img: string | null;
+        name: string;
+        id: string;
+        authorId: string;
+        slug: string;
+        workoutCategoryId: string;
+        status: string;
+        updatedAt: string;
+        difficulty: string;
+        duration: number | undefined;
+        qrCodeImg: string | null; // Ajouter la propriété qrCodeImg
+    },
+    img: File | undefined,
+    qrCodeImg: File | undefined
+) => {
     const config = {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
     };
 
-    const formData = new FormData();
-    formData.append("file", img);
-    formData.append("upload_preset", "ml_default");
-
     if (img) {
-        const res = await axios.post("https://api.cloudinary.com/v1_1/ddjdkkktr/image/upload", formData, config)
-        let imageUrl = res.data.secure_url
+        const formData = new FormData();
+        formData.append('file', img);
+        formData.append('upload_preset', 'ml_default');
 
-        const workoutWithNewImage = {...workout, imageUrl}
+        const res = await axios.post(
+            'https://api.cloudinary.com/v1_1/ddjdkkktr/image/upload',
+            formData,
+            config
+        );
+        const imageUrl = res.data.secure_url;
 
-        return fetcher({
-            url: "/api/workouts/editWorkout",
-            method: "POST",
-            body: JSON.parse(JSON.stringify(workoutWithNewImage)),
-        });
+        workout = {
+            ...workout,
+            img: imageUrl,
+        };
+    }
+
+    if (qrCodeImg) {
+        const qrCodeFormData = new FormData();
+        qrCodeFormData.append('file', qrCodeImg);
+        qrCodeFormData.append('upload_preset', 'ml_default');
+
+        const qrCodeRes = await axios.post(
+            'https://api.cloudinary.com/v1_1/ddjdkkktr/image/upload',
+            qrCodeFormData,
+            config
+        );
+        const qrCodeImageUrl = qrCodeRes.data.secure_url;
+
+        workout = {
+            ...workout,
+            qrCodeImg: qrCodeImageUrl,
+        };
     }
 
     return fetcher({
-        url: "/api/workouts/editWorkout",
-        method: "POST",
+        url: '/api/workouts/editWorkout',
+        method: 'POST',
         body: JSON.parse(JSON.stringify(workout)),
     });
-
 };
+
+
 
 export const createNewCategory = async (name: string) => {
 
@@ -253,8 +300,6 @@ export const createNewWorkoutCategory = async (name: string) => {
         },
     })
 }
-
-
 
 
 export const editCategory = async (category: {
@@ -426,12 +471,11 @@ export const editWorkoutSection = async (section: SectionsWithImgFile) => {
         const res = await axios.post("https://api.cloudinary.com/v1_1/ddjdkkktr/image/upload", formData, config);
         const imageUrl = res.data.secure_url;
 
-        return axios.post("/api/workoutSections/editSection", {...section, imageUrl});
+        return axios.post("/api/workoutSections/editWorkoutSection", {...section, imageUrl});
     } else {
-        return axios.post("/api/workoutSections/editSection", section);
+        return axios.post("/api/workoutSections/editWorkoutSection", section);
     }
 };
-
 
 
 export const deletePost = (postId: string) => {

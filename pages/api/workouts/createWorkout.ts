@@ -10,6 +10,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             data: {
                 name: req.body.name,
                 workoutCategoryId: req.body.workoutCategoryId,
+                difficulty: req.body.difficulty,
+                duration :req.body.duration,
                 img: req.body.img,
                 qrCodeImg: req.body.qrCodeImg,
                 slug: req.body.slug,

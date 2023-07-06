@@ -2,8 +2,8 @@
 import React, {useEffect, useState} from 'react';
 import Input from "@/components/UI/Input";
 import Button from "@/components/UI/Button";
-import {Category, Section} from ".prisma/client";
-import {createNewPost, createNewSections, createNewWorkout, createNewWorkoutSections} from "@/lib/api";
+import {Category} from ".prisma/client";
+import {createNewWorkout, createNewWorkoutSections} from "@/lib/api";
 import Card from "@/components/UI/Card";
 import {useRouter} from "next/navigation";
 import TextArea from "@/components/UI/TextArea";
@@ -19,22 +19,26 @@ const Page = () => {
     const [name, setName] = useState("");
     const [status, setStatus] = useState("");
     const [img, setImg] = useState<File>();
+    const [qrCodeImg, setQrCodeImg] = useState<File>();
+    const [difficulty, setDifficulty] = useState("")
+    const [duration, setDuration] = useState<number | undefined>(undefined);
     const [isLoad, setIsLoad] = useState(false);
     const [workoutCategoryId, setWorkoutCategoryId] = useState<string>();
     const [authorId, setAuthorId] = useState<string>();
     const [imgUrl, setImgUrl] = useState<string | undefined>();
+    const [qrCodeImgUrl, setQrCodeImgUrl] = useState<string | undefined>();
     const [sectionImgUrl, setSectionImgUrl] = useState<string | undefined>()
     const [sections, setSections] = useState<SectionsWithImgFile[]>([{
         id: "",
         subTitle: "",
         paragraph: "",
+        difficulty: "",
+        duration: undefined,
         order: 1,
         imgFile: null
     }]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [authors, setAuthors] = useState<User[]>([]);
-
-    console.log(sections)
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
@@ -44,12 +48,20 @@ const Page = () => {
     };
 
 
+    const handleQrCodeFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (files && files.length > 0) {
+            setQrCodeImg(files[0]);
+        }
+    };
+
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (img) {
             try {
-                const newWorkout = await createNewWorkout(name, workoutCategoryId, img, status, authorId);
+                const newWorkout = await createNewWorkout(name, workoutCategoryId, img, qrCodeImg, status, authorId, difficulty, duration);
                 const filteredSections = sections.filter((obj) => {
                     return obj.subTitle.trim() !== "";
                 });
@@ -76,12 +88,16 @@ const Page = () => {
                 subTitle: "",
                 paragraph: "",
                 order: newOrder,
-                imgFile : null
+                difficulty: "",
+                duration: undefined,
+                imgFile: null
             };
 
             setSections(prevSections => [...prevSections, newSection]);
         }
     };
+
+    console.log(qrCodeImg)
 
     const getCategories = async () => {
         try {
@@ -134,6 +150,19 @@ const Page = () => {
                             value={name}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
                         />
+                        <Input
+                            placeholder="Duration"
+                            className={'bg-white'}
+                            type={'number'}
+                            value={duration !== undefined ? duration.toString() : ''}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                const value = parseFloat(e.target.value);
+                                if (!isNaN(value)) {
+                                    setDuration(value);
+                                } else {
+                                    setDuration(undefined);
+                                }
+                            }}/>
                         {
                             isLoad ?
                                 <select
@@ -176,6 +205,17 @@ const Page = () => {
                             <option value={"DRAFT"}>DRAFT
                             </option>
                             <option value="PUBLISHED">PUBLISHED
+                            </option>
+                        </select>
+
+                        <select
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setDifficulty(e.target.value)}
+                            value={difficulty}
+                            className={"p-4 text-lg rounded-small w-full !border-0"}
+                        >
+                            <option value={"medium"}>Medium
+                            </option>
+                            <option value="hard">Hard
                             </option>
                         </select>
 
@@ -229,8 +269,16 @@ const Page = () => {
                             handleAddSection()
                         }}>Add</Button>
 
+                        <div className={'text-xl'}>Workout Image</div>
+
                         <Input className={'!p-1'} type={"file"} value={imgUrl}
                                onChange={handleFileChange}
+                        />
+
+                        <div className={'text-xl'}>Qr Code Image</div>
+
+                        <Input className={'!p-1'} type={"file"} value={qrCodeImgUrl}
+                               onChange={handleQrCodeFileChange}
                         />
                         <Button type="submit">Create</Button>
                     </form> : <Loading></Loading>

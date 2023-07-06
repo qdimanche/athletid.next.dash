@@ -48,7 +48,8 @@ model Workout {
   authorId          String
   name              String
   status            String           @default("DRAFT")
-  difficulty        String           @default("Medium")
+  difficulty        String           @default("medium")
+  duration          Int
   img               String?
   qrCodeImg         String?
   slug              String           @default("undefined")

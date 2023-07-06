@@ -73,6 +73,8 @@ const Navbar = (props: any) => {
                     <Link href="/">Home</Link>
                     <Link href="/posts">Posts</Link>
                     <Link href="/categories">Categories</Link>
+                    <Link href="/workouts">Workouts</Link>
+                    <Link href="/workoutCategories">Workout Categories</Link>
                     <DropdownComponent user={props.user}/>
                 </div>
 
@@ -109,6 +111,13 @@ const Navbar = (props: any) => {
                             <li className={'text-[38px] opacity-60'}>
                                 <Link href="/categories">Categories</Link>
                             </li>
+                            <li className={'text-[38px] opacity-60'}>
+                                <Link href="/workouts">Workouts</Link>
+                            </li>
+                            <li className={'text-[38px] opacity-60'}>
+                                <Link href="/workoutCategories">Workout Categories</Link>
+                            </li>
+
                             <li className={'text-[38px] opacity-60'}>
                                 <div onClick={() => {
                                     handleDisconnect()
