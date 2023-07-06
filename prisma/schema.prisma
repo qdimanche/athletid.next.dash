@@ -49,14 +49,14 @@ model Workout {
   name              String
   status            String           @default("DRAFT")
   difficulty        String           @default("medium")
-  duration          Int
   img               String?
-  qrCodeImg         String?
   slug              String           @default("undefined")
   workoutCategoryId String
-  sections          WorkoutSection[]
+  qrCodeImg         String?
+  duration          Int
   author            User             @relation(fields: [authorId], references: [id])
   WorkoutCategory   WorkoutCategory  @relation(fields: [workoutCategoryId], references: [id])
+  sections          WorkoutSection[]
 
   @@index([authorId, id])
   @@index([workoutCategoryId, id])

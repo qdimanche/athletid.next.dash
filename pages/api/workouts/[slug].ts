@@ -10,7 +10,7 @@ export default async function signin(
 
     const workout = await db.workout.findFirst({
         where: {
-            slug: slug?.toString(),
+            slug: String(slug),
         },
     });
 
@@ -18,6 +18,6 @@ export default async function signin(
         res.json(workout)
     } else {
         res.status(401);
-        res.json({error: "Invalid workoutId"});
+        res.json({error: "Invalid workout slug"});
     }
 }
