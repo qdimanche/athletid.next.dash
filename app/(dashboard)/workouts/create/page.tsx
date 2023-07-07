@@ -17,10 +17,10 @@ const Page = () => {
 
     const router = useRouter()
     const [name, setName] = useState("");
-    const [status, setStatus] = useState("");
+    const [status, setStatus] = useState("DRAFT");
     const [img, setImg] = useState<File>();
     const [qrCodeImg, setQrCodeImg] = useState<File>();
-    const [difficulty, setDifficulty] = useState("")
+    const [difficulty, setDifficulty] = useState("medium")
     const [duration, setDuration] = useState<number | undefined>(undefined);
     const [isLoad, setIsLoad] = useState(false);
     const [workoutCategoryId, setWorkoutCategoryId] = useState<string>();
@@ -97,7 +97,7 @@ const Page = () => {
         }
     };
 
-    console.log(qrCodeImg)
+    console.log(status)
 
     const getCategories = async () => {
         try {

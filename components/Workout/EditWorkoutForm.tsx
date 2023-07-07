@@ -40,7 +40,8 @@ const EditWorkoutForm: FC<{
 
     const getCategories = async () => {
         try {
-            return await axios.get('/api/workoutCategories');
+            const response = await axios.get('/api/workoutCategories');
+            return response.data;
         } catch (e) {
             console.log(e);
         }
@@ -61,7 +62,7 @@ const EditWorkoutForm: FC<{
     }, [getSections]);
 
     useEffect(() => {
-        getCategories().then((response) => setCategories(response?.data));
+        getCategories().then((data) => setCategories(data));
     }, []);
 
     useEffect(() => {
@@ -172,7 +173,7 @@ const EditWorkoutForm: FC<{
                 <select
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormState((prevState) => ({
                         ...prevState,
-                        categoryId: e.target.value
+                        workoutCategoryId: e.target.value
                     }))}
                     value={formState.workoutCategoryId}
                     className={"p-4 text-lg rounded-small w-full !border-0"}
