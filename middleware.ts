@@ -1,5 +1,6 @@
 import {NextRequest, NextResponse} from "next/server";
 import {jwtVerify} from "jose";
+import {db} from "@/lib/db";
 
 const PUBLIC_FILE = /\.(.*)$/;
 
@@ -23,6 +24,7 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
 
     const jwt = req.cookies.get('jwt_cookie_id');
     const authorId = req.cookies.get('author_id');
+
 
 
     if (pathname === "/signin") {

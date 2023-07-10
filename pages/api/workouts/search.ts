@@ -33,7 +33,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 throw new Error("Invalid request");
             }
 
-
             const workouts = await db.workout.findMany({
                 where: {
                     name: {
@@ -41,9 +40,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     }
                 }
             })
-
-            if (workouts){
-                res.status(200).json({workouts})
+            if (workouts.length > 0) {
+                res.status(200).json({ workouts });
+            } else {
+                res.status(404).json({ message: "No workouts found" });
             }
         } catch (e) {
             res.status(500).end();

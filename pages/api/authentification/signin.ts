@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { db } from "@/lib/db";
 import { comparePasswords, createJWT } from "@/lib/auth";
-import { serialize } from "cookie";
-import bcrypt from "bcrypt";
 import {setCookie} from "cookies-next";
 
 export default async function signin(
@@ -32,8 +30,6 @@ export default async function signin(
 
         if (await isUser()) {
             const jwt = await createJWT(user);
-
-
 
             setCookie('jwt_cookie_id', jwt, { req, res, maxAge: 60 * 60 * 24 });
 
