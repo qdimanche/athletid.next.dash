@@ -80,7 +80,7 @@ const EditWorkoutForm: FC<{
     }, [asyncFields]);
 
     useEffect(() => {
-        const asyncFields = ['categories', 'sections', 'authors']; // Remplacez les valeurs par les noms réels de vos champs asynchrones
+        const asyncFields = ['categories', 'sections', 'authors'];
         setAsyncFields(asyncFields);
     }, []);
 
@@ -93,7 +93,6 @@ const EditWorkoutForm: FC<{
                     return sections.length > 0;
                 case 'authors':
                     return authors.length > 0;
-                // Ajouter des cas pour d'autres champs asynchrones
                 default:
                     return false;
             }

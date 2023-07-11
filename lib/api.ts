@@ -172,7 +172,7 @@ export const createNewWorkout = async (name: string, workoutCategoryId: string |
                 qrCodeImg: QrCodeImageUrl,
                 status: status,
                 difficulty: difficulty,
-                slug: slugify(name.substring(0, name.length - 1)),
+                slug: slugify(name),
                 authorId: authorId
             },
         })

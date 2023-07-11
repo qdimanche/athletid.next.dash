@@ -6,6 +6,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         const author = getCookie('author_id', {req, res});
 
+        const lastChar = req.body.slug.at(-1);
+        let slug = ""
+
+        if (lastChar === "." || lastChar === "/" || lastChar === "?"|| lastChar === "!" || lastChar === "/"   )
+        {
+            slug = req.body.slug.substring(0, req.body.slug.length - 1)
+        }else {
+            slug = req.body.slug
+        }
+
+
         const newWorkout = await db.workout.create({
             data: {
                 name: req.body.name,
@@ -14,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 duration :req.body.duration,
                 img: req.body.img,
                 qrCodeImg: req.body.qrCodeImg,
-                slug: req.body.slug,
+                slug: slug,
                 status: req.body.status,
                 authorId: req.body.authorId,
             },
