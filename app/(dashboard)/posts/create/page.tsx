@@ -130,6 +130,7 @@ const Page = () => {
                     <form className="flex flex-col space-y-6" onSubmit={handleSubmit}>
                         <Input
                             placeholder="Name"
+                            required={true}
                             className={'bg-white'}
                             value={name}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
@@ -139,6 +140,7 @@ const Page = () => {
                                 <select
                                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setCategoryId(e.target.value)}
                                     value={categoryId}
+                                    required
                                     className={"p-4 text-lg rounded-small w-full !border-0"}
                                 >
                                     {categories.map((category) => {
@@ -154,6 +156,7 @@ const Page = () => {
                             <select
                                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setAuthorId(e.target.value)}
                                 value={authorId}
+                                required
                                 className={"p-4 text-lg rounded-small w-full !border-0"}
                             >
                                 {authors.map((author) => {
@@ -171,6 +174,7 @@ const Page = () => {
                         <select
                             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setStatus(e.target.value)}
                             value={status}
+                            required
                             className={"p-4 text-lg rounded-small w-full !border-0"}
                         >
                             <option value={"DRAFT"}>DRAFT
@@ -229,7 +233,7 @@ const Page = () => {
                             handleAddSection()
                         }}>Add</Button>
 
-                        <Input className={'!p-1'} type={"file"} value={imgUrl}
+                        <Input required={true} className={'!p-1'} type={"file"} value={imgUrl}
                                onChange={handleFileChange}
                         />
                         <Button type="submit">Create</Button>

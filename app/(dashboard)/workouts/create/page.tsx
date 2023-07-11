@@ -97,8 +97,6 @@ const Page = () => {
         }
     };
 
-    console.log(status)
-
     const getCategories = async () => {
         try {
             const response = await axios.get("/api/workoutCategories");
@@ -148,10 +146,12 @@ const Page = () => {
                             placeholder="Name"
                             className={'bg-white'}
                             value={name}
+                            required={true}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
                         />
                         <Input
                             placeholder="Duration"
+                            required={true}
                             className={'bg-white'}
                             type={'number'}
                             value={duration !== undefined ? duration.toString() : ''}
@@ -168,6 +168,7 @@ const Page = () => {
                                 <select
                                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setWorkoutCategoryId(e.target.value)}
                                     value={workoutCategoryId}
+                                    required={true}
                                     className={"p-4 text-lg rounded-small w-full !border-0"}
                                 >
                                     {categories.map((category) => {
@@ -183,6 +184,7 @@ const Page = () => {
                             <select
                                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setAuthorId(e.target.value)}
                                 value={authorId}
+                                required={true}
                                 className={"p-4 text-lg rounded-small w-full !border-0"}
                             >
                                 {authors.map((author) => {
@@ -200,6 +202,7 @@ const Page = () => {
                         <select
                             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setStatus(e.target.value)}
                             value={status}
+                            required={true}
                             className={"p-4 text-lg rounded-small w-full !border-0"}
                         >
                             <option value={"DRAFT"}>DRAFT
@@ -211,6 +214,7 @@ const Page = () => {
                         <select
                             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setDifficulty(e.target.value)}
                             value={difficulty}
+                            required={true}
                             className={"p-4 text-lg rounded-small w-full !border-0"}
                         >
                             <option value={"medium"}>Medium
@@ -271,7 +275,7 @@ const Page = () => {
 
                         <div className={'text-xl'}>Workout Image</div>
 
-                        <Input className={'!p-1'} type={"file"} value={imgUrl}
+                        <Input required={true} className={'!p-1'} type={"file"} value={imgUrl}
                                onChange={handleFileChange}
                         />
 

@@ -8,10 +8,11 @@ export interface InputProps
     type?: string
 }
 
-const Input : FC<InputProps> = ({ className, type ,...props }) => {
+const Input : FC<InputProps> = ({ className, type, required,...props }) => {
     return (
         <input
             type={type}
+            required={required}
             className={clsx(
                 "p-4 text-lg rounded-small w-full !border-0",
                 className
