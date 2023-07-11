@@ -34,7 +34,7 @@ const Page = () => {
     const [categories, setCategories] = useState<Category[]>([]);
     const [authors, setAuthors] = useState<User[]>([]);
 
-    console.log(sections)
+    console.log(img, sections)
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
