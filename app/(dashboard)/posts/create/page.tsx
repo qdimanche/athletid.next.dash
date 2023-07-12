@@ -18,6 +18,7 @@ const Page = () => {
     const router = useRouter()
     const [name, setName] = useState("");
     const [status, setStatus] = useState("");
+    const [duration, setDuration] = useState<number | undefined>();
     const [img, setImg] = useState<File>();
     const [isLoad, setIsLoad] = useState(false);
     const [categoryId, setCategoryId] = useState<string>();
@@ -49,7 +50,7 @@ const Page = () => {
 
         if (img) {
             try {
-                const newPost = await createNewPost(name, categoryId, img, status, authorId);
+                const newPost = await createNewPost(name, categoryId, img, status, authorId, duration);
                 const filteredSections = sections.filter((obj) => {
                     return obj.subTitle.trim() !== "";
                 });
@@ -135,6 +136,20 @@ const Page = () => {
                             value={name}
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
                         />
+                        <Input
+                            placeholder="Duration"
+                            required={true}
+                            className={'bg-white'}
+                            type={'number'}
+                            value={duration !== undefined ? duration.toString() : ''}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                const value = parseFloat(e.target.value);
+                                if (!isNaN(value)) {
+                                    setDuration(value);
+                                } else {
+                                    setDuration(undefined);
+                                }
+                            }}/>
                         {
                             isLoad ?
                                 <select

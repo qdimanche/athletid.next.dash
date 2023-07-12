@@ -20,6 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             },
             data: {
                 name: req.body.name,
+                duration : req.body.duration,
                 categoryId: req.body.categoryId,
                 img: req.body.imageUrl ? req.body.imageUrl : req.body.img ,
                 slug: slug,

@@ -2,7 +2,7 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import {Category, Post} from ".prisma/client";
 import {useRouter} from "next/navigation";
-import {editPost, editSection, listSections} from "@/lib/api";
+import {createNewSections, editPost, editSection, listSections} from "@/lib/api";
 import Card from "@/components/UI/Card";
 import Input from "@/components/UI/Input";
 import Button from "@/components/UI/Button";
@@ -22,6 +22,7 @@ const EditPostForm: FC<{
 
 
     const [sections, setSections] = useState<SectionsWithImgFile[]>([]);
+    const [newSections, setNewSections] = useState<SectionsWithImgFile[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
     const [authors, setAuhtors] = useState<User[]>([]);
     const [isLoad, setIsLoad] = useState(false);
@@ -98,19 +99,41 @@ const EditPostForm: FC<{
             for (const section of sections) {
                 await editSection(section);
             }
+            await createNewSections(formState.id, newSections)
             router.replace("/posts")
         } catch (e) {
             console.log(e)
         } finally {
             setFormState({...formState})
         }
-    }, [
-        {...formState}
-    ])
+    }, [formState, img, newSections, router, sections])
 
-    console.log(sections)
+    const handleAddSection = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
 
-    sections?.sort((a, b) => a.order - b.order);
+        const newOrder = sections.length + newSections.length + 1;
+
+        if (newSections.length === 0 || (newSections[newSections.length - 1].subTitle.trim() !== "" && newSections[newSections.length - 1].paragraph.trim() !== "")) {
+            const newSection: SectionsWithImgFile = {
+                id: "",
+                subTitle: "",
+                paragraph: "",
+                order: newOrder,
+                imgFile: null
+            };
+
+            setNewSections(prevSections => [...prevSections, newSection]);
+        }
+    };
+
+    const handleDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const duration = parseFloat(e.target.value);
+        setFormState((prevState) => ({
+            ...prevState,
+            duration: !isNaN(duration) ? duration : 0,
+        }));
+    };
+
 
     return (
         <Card>
@@ -128,6 +151,13 @@ const EditPostForm: FC<{
                                     name: e.target.value,
                                 }))
                             }
+                        />
+                        <Input
+                            placeholder="Duration"
+                            className={'bg-white'}
+                            type={"number"}
+                            value={formState.duration !== undefined ? formState.duration.toString() : ''}
+                            onChange={handleDurationChange}
                         />
                         <select
                             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormState((prevState) => ({
@@ -179,7 +209,7 @@ const EditPostForm: FC<{
 
                         <div className={'text-xl !mt-12'}>Sections</div>
 
-                        {sections?.map((value, index) => {
+                        {sections?.map((value) => {
                             return (
                                 <div key={value.id}>
                                     <Input
@@ -234,11 +264,66 @@ const EditPostForm: FC<{
                                 </div>
                             );
                         })}
+                        {newSections?.map((value, index) => {
+                            return (
+                                <div key={value.id}>
+                                    <Input
+                                        placeholder="Subtitle"
+                                        value={value.subTitle || ""}
+                                        className={'mb-6'}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                            const newSectionsCopy = [...newSections];
+                                            newSectionsCopy[index] = {
+                                                ...newSectionsCopy[index],
+                                                subTitle: e.target.value,
+                                            };
+                                            setNewSections(newSectionsCopy);
+                                        }}
+                                    />
+                                    <TextArea
+                                        placeholder="Paragraph"
+                                        value={value.paragraph || ""}
+                                        onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                                            const newSectionsCopy = [...newSections];
+                                            newSectionsCopy[index] = {
+                                                ...newSectionsCopy[index],
+                                                paragraph: e.target.value,
+                                            };
+                                            setNewSections(newSectionsCopy);
+                                        }}
+                                    />
+                                    {value.img && (
+                                        <div className={"my-6 h-[200px] w-[400px] relative"}>
+                                            <Image alt={""} sizes={"60vw"} fill src={value.img} className={"object-cover"}/>
+                                        </div>
+                                    )}
+                                    <input
+                                        type="file"
+                                        className="mb-6"
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                            const files = e.target.files;
+                                            if (files && files.length > 0) {
+                                                const index = newSections.findIndex((s) => s.id === value.id);
+                                                newSections[index] = {
+                                                    ...newSections[index],
+                                                    img: value.img,
+                                                    imgFile: files[0],
+                                                };
+                                                setNewSections(newSections);
+                                            }
+                                        }}
+                                    />
+                                </div>
+                            );
+                        })}
+
+                        <Button className={'!rounded-small !p-4'} intent={"secondary"} onClick={handleAddSection}>Add</Button>
 
                         <div className={"my-6 h-[200px] w-[400px] relative"}>
                             <Image alt={""} sizes={"60vw"} fill className={'object-cover'}
                                    src={formState.img ?? '/placeholder.png'}/>
                         </div>
+
                         <Input className={'!p-1'} type={"file"} value={undefined}
                                onChange={handleFileChange}
                         />

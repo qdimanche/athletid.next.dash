@@ -95,7 +95,7 @@ export const editUser = async (user: {
 };
 
 
-export const createNewPost = async (name: string, categoryId: string | undefined, img: File, status: string, authorId: string | undefined) => {
+export const createNewPost = async (name: string, categoryId: string | undefined, img: File, status: string, authorId: string | undefined, duration: number | undefined) => {
 
     const formData = new FormData();
     formData.append("file", img);
@@ -115,6 +115,7 @@ export const createNewPost = async (name: string, categoryId: string | undefined
             body: {
                 name: name,
                 categoryId: categoryId,
+                duration: duration,
                 img: imageUrl,
                 status: status,
                 slug: slugify(name.substring(0, name.length - 1)),
@@ -130,6 +131,7 @@ export const createNewPost = async (name: string, categoryId: string | undefined
             name: name,
             categoryId: categoryId,
             status: status,
+            duration: duration,
             slug: slugify(name.substring(0, name.length - 1)),
             authorId: authorId
         },
@@ -238,7 +240,8 @@ export const editPost = async (post: {
     slug: string;
     categoryId: string;
     status: string;
-    updatedAt: string
+    updatedAt: string,
+    duration: number
 }, img: any) => {
 
     const config = {
